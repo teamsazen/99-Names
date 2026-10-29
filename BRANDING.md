@@ -6,6 +6,6 @@ The MIT license does not grant rights to the 99 Names name or brand identity. 99
 
 If you publish your own app or fork, use your own name, logo, app icon, and promotional branding unless you have prior written permission from the relevant rights holders. Do not present it as the official 99 Names app or imply endorsement. Truthful attribution, links to this project, and uses permitted by applicable law remain allowed.
 
-To improve the official, fully free 99 Names app under its existing branding, please [contribute here](https://github.com/muzzammil763/99-Names/blob/main/README.md#contributing). You may retain the branding while developing and submitting contributions to this project.
+To improve the official, fully free 99 Names app under its existing branding, please [contribute here](https://github.com/teamsazen/99-Names/blob/main/README.md#contributing). You may retain the branding while developing and submitting contributions to this project.
 
 Third-party dependencies, fonts, religious texts, translations, and other third-party content retain their own licenses and rights; the code license does not relicense them.

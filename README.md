@@ -105,4 +105,4 @@ Contributions are welcome! Open an issue or send a pull request.
 
 ## Contributors
 
-<a href="https://github.com/muzzammil763"><img src=".github/readme/contributor.png" alt="muzzammil763" title="muzzammil763" width="64" height="64"></a>
+<a href="https://github.com/teamsazen"><img src=".github/readme/contributor.png" alt="teamsazen" title="teamsazen" width="64" height="64"></a>
