@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://99.teamsazen.com/sitemap.xml
