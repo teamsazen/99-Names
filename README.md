@@ -82,6 +82,15 @@ edit `docs/privacy-policy/index.html` and redeploy to change it. Deploy with
 any new Arabic or Urdu text on the site must already exist in the app; Boldonse
 and Google Sans are full copies.
 
+The site uses the Sazen studio design shared with teamsazen.com and the other
+app sites: a floating glass header that always stays in view, full-width
+sections, the app's ivory, ink blue and bronze in light mode and pure black in
+dark mode, and a dark footer that links back to https://teamsazen.com. Styles
+live in `website/public/styles.css` (also used by the privacy page), motion and
+the Names search in `website/public/site.js`, with Lenis (MIT) in
+`website/public/js/` and Plus Jakarta Sans (SIL Open Font License) self-hosted
+in `website/public/fonts/`. Nothing is loaded from other servers.
+
 ## Release
 
     flutter build apk --release --split-per-abi
