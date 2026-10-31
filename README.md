@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://99asmaulhusna.pages.dev"><img src="store/playstore/feature_graphic.png" alt="99 Names - Asmaul Husna" width="1024"></a>
+  <a href="https://99.teamsazen.com"><img src="store/playstore/feature_graphic.png" alt="99 Names - Asmaul Husna" width="1024"></a>
   <h1>99 Names - Asmaul Husna</h1>
   <p>The 99 beautiful names of Allah. Arabic, English and Urdu. Fully offline.</p>
   <a href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna"><img src=".github/readme/google-play.svg" alt="Get it on Google Play" width="220" height="72"></a>
@@ -72,11 +72,11 @@ show the current identity.
 ## Website
 
 `website/` is the landing page, live at
-https://99asmaulhusna.pages.dev (Cloudflare Pages). `node build.mjs` fills `src/index.html` with all 99 Names read from
+https://99.teamsazen.com (Cloudflare Pages). `node build.mjs` fills `src/index.html` with all 99 Names read from
 `lib/src/data/names.dart`, so the site's Names section never drifts from the
 app, and copies `public/` (fonts from `assets/fonts/`, screenshots) and the
 privacy policy from `docs/privacy-policy/` into `dist/`. The privacy policy URL
-for Google Play (and any later store) is https://99asmaulhusna.pages.dev/privacy;
+for Google Play (and any later store) is https://99.teamsazen.com/privacy;
 edit `docs/privacy-policy/index.html` and redeploy to change it. Deploy with
 `cd website && npm run deploy`. Arabic and Urdu use the app's trimmed fonts, so
 any new Arabic or Urdu text on the site must already exist in the app; Boldonse
