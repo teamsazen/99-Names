@@ -74,7 +74,9 @@ show the current identity.
 `website/` is the landing page, live at
 https://99.teamsazen.com (Cloudflare Pages). `node build.mjs` fills `src/index.html` with all 99 Names read from
 `lib/src/data/names.dart`, so the site's Names section never drifts from the
-app, and copies `public/` (fonts from `assets/fonts/`, screenshots) and the
+app, writes one page per Name at `/names/<name>` from `src/name.html` (the two
+Names transliterated Al-Majid get their number in the URL: `al-majid-48`,
+`al-majid-65`) and generates `sitemap.xml` with every page, and copies `public/` (fonts from `assets/fonts/`, screenshots) and the
 privacy policy from `docs/privacy-policy/` into `dist/`. The privacy policy URL
 for Google Play (and any later store) is https://99.teamsazen.com/privacy;
 edit `docs/privacy-policy/index.html` and redeploy to change it. Deploy with

@@ -15,7 +15,7 @@
     requestAnimationFrame(raf);
   }
 
-  // Search the 99 Names; tap a Name to show its reflection.
+  // Search the 99 Names; tap a Name to show its reflection (its name links to its own page).
   const q = document.getElementById('q');
   const cards = [...document.querySelectorAll('.name')];
   const empty = document.getElementById('empty');
@@ -29,7 +29,7 @@
     }
     empty.hidden = shown > 0;
   });
-  for (const c of cards) c.addEventListener('click', () => c.classList.toggle('open'));
+  for (const c of cards) c.addEventListener('click', (e) => { if (!e.target.closest('a')) c.classList.toggle('open'); });
 
   // Giant footer wordmark: fill the width exactly.
   const fit = () => document.querySelectorAll('[data-fit]').forEach((el) => {

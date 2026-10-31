@@ -258,7 +258,10 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .name:hover { border-color: var(--accent); transform: translateY(-3px); }
 .name .num { grid-area: num; align-self: start; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 800; }
 .name .ar { grid-area: ar; font-family: "Saleem", serif; font-size: 42px; line-height: 1.5; color: var(--ink); text-align: right; }
-.name .tr { grid-area: tr; color: var(--accent); font-weight: 800; font-size: 19px; letter-spacing: -.02em; margin-top: 4px; }
+.name .tr { grid-area: tr; justify-self: start; color: var(--accent); font-weight: 800; font-size: 19px; letter-spacing: -.02em; margin-top: 4px; text-decoration: none; }
+.name .tr:hover { text-decoration: underline; }
+.name .tr::after { content: " →"; font-weight: 700; opacity: 0; transition: opacity .2s ease; }
+.name:hover .tr::after, .name .tr:focus-visible::after { opacity: 1; }
 .name .en { grid-area: en; font-size: 14px; font-weight: 600; color: var(--muted); }
 .name .ur { grid-area: ur; font-family: "Nastaleeq", serif; font-size: 20px; line-height: 1.9; color: var(--body); text-align: left; }
 .name .rf { display: none; }
@@ -307,6 +310,31 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .foot .wordmark span:nth-child(8) { transition-delay: .35s; }
 html:not(.js) .foot .wordmark span { transform: none; }
 .foot .copy { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin: 16px 0 0; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .12); font-size: 14px; }
+
+/* ---------- One page per Name (/names/<name>) ---------- */
+.name-hero { padding-block: calc(110px + env(safe-area-inset-top)) clamp(32px, 4vw, 56px); }
+.name-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 48px; margin-top: 24px; padding-bottom: clamp(28px, 4vw, 48px); border-bottom: 1px solid var(--line); }
+.name-head h1 { margin: 0; font-size: clamp(54px, 8vw, 140px); line-height: .95; letter-spacing: -.055em; }
+.name-en { margin: 14px 0 0; font-size: clamp(22px, 2.4vw, 36px); font-weight: 700; letter-spacing: -.03em; color: var(--muted); }
+.name-ar { margin: 0; font-family: "Saleem", serif; font-size: clamp(90px, 13vw, 210px); line-height: 1.35; color: var(--accent); }
+.name-body { padding-block: 0 clamp(40px, 6vw, 80px); }
+.name-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
+.name-rf { margin: 0; font-size: clamp(26px, 2.8vw, 44px); line-height: 1.25; font-weight: 700; letter-spacing: -.03em; }
+.name-facts { margin: 0; border-top: 1px solid var(--line); }
+.name-facts div { display: grid; grid-template-columns: 150px 1fr; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.name-facts dt { color: var(--muted); font-size: 14px; font-weight: 700; }
+.name-facts dd { margin: 0; font-weight: 700; }
+.name-ar-sm { font-family: "Saleem", serif; font-size: 34px; line-height: 1.5; text-align: left; }
+.name-ur { font-size: 24px; line-height: 2; text-align: left; font-weight: 400; }
+.name-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pager-card { display: grid; gap: 2px; padding: 22px 26px; border-radius: 24px; background: var(--surface); border: 1px solid var(--card-line); color: var(--ink); text-decoration: none; transition: border-color .2s ease, transform .4s var(--ease); }
+.pager-card:hover { color: var(--ink); border-color: var(--accent); transform: translateY(-3px); }
+.pager-card .eyebrow { margin: 0 0 4px; }
+.pager-card b { font-size: clamp(22px, 2vw, 30px); letter-spacing: -.03em; }
+.pager-card span:last-child { color: var(--muted); font-weight: 600; }
+.pager-card.next { text-align: right; }
+@media (max-width: 900px) { .name-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .name-pager { grid-template-columns: 1fr; } .pager-card.next { text-align: left; } .name-facts div { grid-template-columns: 1fr; gap: 2px; } }
 
 /* ---------- Privacy page (Sazen legal layout) ---------- */
 .legal { padding-block: calc(110px + env(safe-area-inset-top)) clamp(60px, 8vw, 110px); }
