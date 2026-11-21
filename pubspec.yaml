@@ -29,9 +29,6 @@ flutter:
           weight: 600
         - asset: assets/fonts/GoogleSans-Bold.ttf
           weight: 700
-    - family: Boldonse
-      fonts:
-        - asset: assets/fonts/Boldonse-Regular.ttf
     - family: PDMS Saleem Quran
       fonts:
         - asset: assets/fonts/PDMSSaleemQuran.ttf

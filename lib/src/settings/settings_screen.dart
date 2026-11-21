@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../ui/app_logo.dart';
+import '../ui/icons.dart';
 import '../ui/theme.dart';
 import '../ui/widgets.dart';
 import 'settings_store.dart';
@@ -31,8 +32,23 @@ Future<void> _openAppAction(
   }
 }
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _raised = false;
+
+  bool _onScroll(ScrollNotification n) {
+    if (n.depth == 0) {
+      final raised = n.metrics.pixels > context.r(36);
+      if (raised != _raised) setState(() => _raised = raised);
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,344 +57,181 @@ class SettingsScreen extends StatelessWidget {
       listenable: s,
       builder: (context, _) {
         final p = context.palette;
+        const gap = SizedBox(height: 28);
         return Scaffold(
-          body: SafeArea(
-            bottom: false,
-            child: ListView(
-              padding: EdgeInsets.fromLTRB(
-                context.r(12),
-                context.r(8),
-                context.r(12),
-                24 + MediaQuery.paddingOf(context).bottom,
-              ),
-              children: [
-                Row(
+          body: Stack(
+            children: [
+              NotificationListener<ScrollNotification>(
+                onNotification: _onScroll,
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    context.r(16),
+                    MediaQuery.paddingOf(context).top + GlassBar.height,
+                    context.r(16),
+                    32 + MediaQuery.paddingOf(context).bottom,
+                  ),
                   children: [
-                    HeaderButton(
-                      icon: Icons.arrow_back_rounded,
-                      tooltip: 'Back',
-                      onTap: () => Navigator.of(context).pop(),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 4, bottom: 20),
+                      child: LargeTitle('Settings'),
                     ),
-                  ],
-                ),
-                SizedBox(height: context.r(16)),
-                const EditorialTitle('Your Settings', size: 26),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('APPEARANCE'),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    for (final (mode, icon, label) in const [
-                      (
-                        ThemeMode.system,
-                        Icons.brightness_auto_rounded,
-                        'System',
-                      ),
-                      (ThemeMode.light, Icons.light_mode_rounded, 'Light'),
-                      (ThemeMode.dark, Icons.dark_mode_rounded, 'Dark'),
-                    ]) ...[
-                      if (mode != ThemeMode.system) const SizedBox(width: 8),
-                      Expanded(
-                        child: _ThemeOption(
-                          icon: icon,
-                          label: label,
-                          selected: s.themeMode == mode,
-                          onTap: () => s.setThemeMode(mode),
+                    const _BrandCard(),
+                    gap,
+                    const SectionLabel('Appearance'),
+                    _ThemePicker(mode: s.themeMode, onChanged: s.setThemeMode),
+                    gap,
+                    GroupedSection(
+                      label: 'Show on cards',
+                      children: [
+                        _SwitchRow(
+                          title: 'Transliteration',
+                          subtitle: 'Ar-Rahman',
+                          value: s.showTransliteration,
+                          onChanged: s.setShowTransliteration,
                         ),
-                      ),
-                    ],
-                  ],
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('SHOW ON CARDS'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  intensity: .4,
-                  padding: const EdgeInsets.all(4),
-                  child: Column(
-                    children: [
-                      _SwitchRow(
-                        title: 'Transliteration',
-                        subtitle: 'Ar-Rahman',
-                        value: s.showTransliteration,
-                        onChanged: s.setShowTransliteration,
-                      ),
-                      Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: p.border,
-                      ),
-                      _SwitchRow(
-                        title: 'English meaning',
-                        subtitle: 'The Most Gracious',
-                        value: s.showEnglish,
-                        onChanged: s.setShowEnglish,
-                      ),
-                      Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: p.border,
-                      ),
-                      _SwitchRow(
-                        title: 'Urdu meaning',
-                        subtitle: 'بے حد مہربان',
-                        urduSubtitle: true,
-                        value: s.showUrdu,
-                        onChanged: s.setShowUrdu,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('ARABIC TEXT SIZE'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  intensity: .5,
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 70,
-                        child: Center(
-                          child: Text(
-                            'ٱلرَّحْمَٰنُ',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyle(
-                              fontFamily: AppFonts.arabic,
-                              fontSize: 42 * s.arabicScale,
-                              height: 1.5,
-                              color: p.title,
-                            ),
-                          ),
+                        _SwitchRow(
+                          title: 'English meaning',
+                          subtitle: 'The Most Gracious',
+                          value: s.showEnglish,
+                          onChanged: s.setShowEnglish,
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'A',
-                            style: TextStyle(fontSize: 13, color: p.muted),
-                          ),
-                          Expanded(
-                            child: Slider.adaptive(
-                              value: s.arabicScale,
-                              min: .8,
-                              max: 1.4,
-                              divisions: 6,
-                              onChanged: s.setArabicScale,
-                            ),
-                          ),
-                          Text(
-                            'A',
-                            style: TextStyle(fontSize: 20, color: p.muted),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('ABOUT'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  tint: p.gold,
-                  intensity: 2,
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const AppLogo(size: 52, radius: 14),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '99 Names',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                    color: p.title,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  'Version $appVersion',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: p.muted,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'The 99 beautiful names of Allah with transliteration '
-                        'and English and Urdu meanings. Works fully offline: '
-                        'no account, no internet, no tracking.',
-                        style: TextStyle(
-                          fontSize: 13.5,
-                          height: 1.5,
-                          color: p.body,
+                        _SwitchRow(
+                          title: 'Urdu meaning',
+                          subtitle: 'بے حد مہربان',
+                          urduSubtitle: true,
+                          value: s.showUrdu,
+                          onChanged: s.setShowUrdu,
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('SUPPORT THE APP'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  padding: const EdgeInsets.all(4),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        splashColor: p.accent.withValues(alpha: .10),
-                        leading: Icon(Icons.share_outlined, color: p.accent),
-                        title: Text(
-                          'Share app',
-                          style: TextStyle(color: p.title),
-                        ),
-                        subtitle: Text(
-                          'Share 99 Names with friends and family',
-                          style: TextStyle(color: p.muted),
-                        ),
-                        onTap: () => _openAppAction(context, 'share'),
-                      ),
-                      Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: p.border,
-                      ),
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        splashColor: p.accent.withValues(alpha: .10),
-                        leading: Icon(
-                          Icons.star_outline_rounded,
-                          color: p.accent,
-                        ),
-                        title: Text(
-                          'Rate on Google Play',
-                          style: TextStyle(color: p.title),
-                        ),
-                        subtitle: Text(
-                          'Leave a review on the Play Store',
-                          style: TextStyle(color: p.muted),
-                        ),
-                        onTap: () => _openAppAction(context, 'rate'),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('OUR OTHER APPS'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  padding: const EdgeInsets.all(4),
-                  child: Column(
-                    children: [
-                      for (final (i, app) in _otherApps.indexed) ...[
-                        if (i > 0)
-                          Divider(
-                            height: 1,
-                            indent: 16,
-                            endIndent: 16,
-                            color: p.border,
-                          ),
-                        ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          splashColor: p.accent.withValues(alpha: .10),
-                          leading: Container(
-                            foregroundDecoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: p.border),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.asset(
-                                app.icon,
-                                width: 48,
-                                height: 48,
-                                fit: BoxFit.cover,
-                                cacheWidth: 192,
-                                excludeFromSemantics: true,
+                      ],
+                    ),
+                    gap,
+                    GroupedSection(
+                      label: 'Arabic text size',
+                      children: [
+                        SizedBox(
+                          height: 84,
+                          child: Center(
+                            child: Text(
+                              'ٱلرَّحْمَٰنُ',
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                fontFamily: AppFonts.arabic,
+                                fontSize: 42 * s.arabicScale,
+                                height: 1.5,
+                                color: p.title,
                               ),
                             ),
                           ),
-                          title: Text(
-                            app.name,
-                            style: TextStyle(
-                              color: p.title,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          subtitle: Text(
-                            'View on Google Play',
-                            style: TextStyle(color: p.muted),
-                          ),
-                          trailing: Icon(
-                            Icons.open_in_new_rounded,
-                            size: 18,
-                            color: p.accent,
-                          ),
-                          onTap: () => _openAppAction(
-                            context,
-                            'openStore',
-                            app.packageName,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+                          child: Row(
+                            children: [
+                              Text(
+                                'A',
+                                style: TextStyle(fontSize: 13, color: p.muted),
+                              ),
+                              Expanded(
+                                child: Slider.adaptive(
+                                  value: s.arabicScale,
+                                  min: .8,
+                                  max: 1.4,
+                                  divisions: 6,
+                                  onChanged: s.setArabicScale,
+                                ),
+                              ),
+                              Text(
+                                'A',
+                                style: TextStyle(fontSize: 20, color: p.muted),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ],
-                  ),
-                ),
-                SizedBox(height: context.r(16)),
-                const Eyebrow('FONTS & CREDITS'),
-                const SizedBox(height: 8),
-                PatternCard(
-                  intensity: .5,
-                  padding: const EdgeInsets.all(4),
-                  child: Column(
-                    children: [
-                      for (final (i, credit) in _fontCredits.indexed) ...[
-                        if (i > 0)
-                          Divider(
-                            height: 1,
-                            indent: 16,
-                            endIndent: 16,
-                            color: p.border,
-                          ),
-                        _CreditRow(credit),
-                      ],
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Center(
-                  child: TextButton(
-                    onPressed: () => showLicensePage(
-                      context: context,
-                      applicationName: '99 Names',
-                      applicationVersion: appVersion,
                     ),
-                    child: const Text('Open Source Licences'),
+                    gap,
+                    GroupedSection(
+                      label: 'Support the app',
+                      dividerIndent: 60,
+                      children: [
+                        _LinkRow(
+                          leading: _IconTile(AppGlyph.share, p.accent),
+                          title: 'Share app',
+                          subtitle: 'Share 99 Names with friends and family',
+                          onTap: () => _openAppAction(context, 'share'),
+                        ),
+                        _LinkRow(
+                          leading: _IconTile(AppGlyph.star, p.accent),
+                          title: 'Rate on Google Play',
+                          subtitle: 'Leave a review on the Play Store',
+                          onTap: () => _openAppAction(context, 'rate'),
+                        ),
+                      ],
+                    ),
+                    gap,
+                    GroupedSection(
+                      label: 'Our other apps',
+                      dividerIndent: 72,
+                      children: [
+                        for (final app in _otherApps)
+                          _LinkRow(
+                            leading: ClipRSuperellipse(
+                              borderRadius: BorderRadius.circular(
+                                AppRadius.icon,
+                              ),
+                              child: Image.asset(
+                                app.icon,
+                                width: 42,
+                                height: 42,
+                                fit: BoxFit.cover,
+                                cacheWidth: 168,
+                                excludeFromSemantics: true,
+                              ),
+                            ),
+                            title: app.name,
+                            subtitle: 'View on Google Play',
+                            trailing: AppGlyph.external,
+                            onTap: () => _openAppAction(
+                              context,
+                              'openStore',
+                              app.packageName,
+                            ),
+                          ),
+                      ],
+                    ),
+                    gap,
+                    GroupedSection(
+                      label: 'Fonts & credits',
+                      children: [
+                        for (final credit in _fontCredits) _CreditRow(credit),
+                        _LinkRow(
+                          title: 'Open Source Licences',
+                          onTap: () => showLicensePage(
+                            context: context,
+                            applicationName: '99 Names',
+                            applicationVersion: appVersion,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: GlassBar(
+                  raised: _raised,
+                  title: 'Settings',
+                  leading: CircleButton(
+                    glyph: AppGlyph.back,
+                    tooltip: 'Back',
+                    onTap: () => Navigator.of(context).pop(),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },
@@ -417,14 +270,121 @@ const List<_FontCredit> _fontCredits = [
     source: 'Google Fonts',
     url: 'https://fonts.google.com/specimen/Google+Sans',
   ),
-  (
-    font: 'Boldonse',
-    usedFor: 'Titles',
-    note: 'SIL Open Font License 1.1',
-    source: 'Google Fonts',
-    url: 'https://fonts.google.com/specimen/Boldonse',
-  ),
 ];
+
+/// Ink brand card: the app icon, name, version and promise.
+class _BrandCard extends StatelessWidget {
+  const _BrandCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Surface(
+      color: p.hero,
+      padding: EdgeInsets.zero,
+      child: Stack(
+        children: [
+          Positioned(
+            right: -50,
+            bottom: -60,
+            child: Rosette(size: 200, color: p.logoInk.withValues(alpha: .12)),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const AppLogo(size: 56, radius: AppRadius.tile),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '99 Names',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -.5,
+                              color: p.onHero,
+                            ),
+                          ),
+                          Text(
+                            'Version $appVersion',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                              color: p.heroMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Text(
+                  'The 99 beautiful names of Allah with transliteration and '
+                  'English and Urdu meanings.',
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    height: 1.5,
+                    color: p.onHero,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final label in const [
+                      'Offline',
+                      'No account',
+                      'No tracking',
+                    ])
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(10, 6, 12, 6),
+                        decoration: ShapeDecoration(
+                          color: p.onHero.withValues(alpha: .08),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 6,
+                              height: 6,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: p.logoInk,
+                              ),
+                            ),
+                            const SizedBox(width: 7),
+                            Text(
+                              label,
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                color: p.onHero,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 /// One font with its source. The app is offline, so tapping copies the link
 /// instead of opening it.
@@ -435,16 +395,13 @@ class _CreditRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      splashColor: p.accent.withValues(alpha: .10),
-      highlightColor: p.accent.withValues(alpha: .05),
+    return RowButton(
       onTap: () {
         Clipboard.setData(ClipboardData(text: credit.url));
         showToast(context, 'Link to ${credit.source} copied');
       },
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 14, 12),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: Row(
           children: [
             Expanded(
@@ -454,7 +411,7 @@ class _CreditRow extends StatelessWidget {
                   Text(
                     '${credit.font} · ${credit.usedFor}',
                     style: TextStyle(
-                      fontSize: 14.5,
+                      fontSize: 15,
                       fontWeight: FontWeight.w600,
                       color: p.title,
                     ),
@@ -462,13 +419,13 @@ class _CreditRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     credit.note,
-                    style: TextStyle(fontSize: 12.5, color: p.muted),
+                    style: TextStyle(fontSize: 13, color: p.muted),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     'Source: ${credit.source}',
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: p.accent,
                     ),
@@ -476,7 +433,8 @@ class _CreditRow extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.link_rounded, size: 18, color: p.faint),
+            const SizedBox(width: 12),
+            AppIcon(AppGlyph.link, size: 18, color: p.faint),
           ],
         ),
       ),
@@ -484,41 +442,136 @@ class _CreditRow extends StatelessWidget {
   }
 }
 
-class _ThemeOption extends StatelessWidget {
-  const _ThemeOption({
-    required this.icon,
-    required this.label,
-    required this.selected,
+/// Small rounded square holding a white glyph, like an iOS Settings icon.
+class _IconTile extends StatelessWidget {
+  const _IconTile(this.icon, this.color);
+  final AppGlyph icon;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 30,
+    height: 30,
+    decoration: ShapeDecoration(
+      color: color,
+      shape: RoundedSuperellipseBorder(
+        borderRadius: BorderRadius.circular(AppRadius.icon),
+      ),
+    ),
+    child: Center(
+      child: AppIcon(icon, size: 17, color: context.palette.onAccent),
+    ),
+  );
+}
+
+/// Tappable grouped row: optional leading tile, title, subtitle, trailing icon.
+class _LinkRow extends StatelessWidget {
+  const _LinkRow({
+    required this.title,
     required this.onTap,
+    this.subtitle,
+    this.leading,
+    this.trailing = AppGlyph.chevronRight,
   });
 
-  final IconData icon;
-  final String label;
-  final bool selected;
+  final String title;
+  final String? subtitle;
+  final Widget? leading;
+  final AppGlyph trailing;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return PatternCard(
-      highlight: selected,
-      intensity: selected ? 2 : .5,
-      radius: 16,
+    return RowButton(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          Icon(icon, color: selected ? p.accent : p.muted),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: selected ? p.title : p.body,
-            ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 52),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 14, 10),
+          child: Row(
+            children: [
+              if (leading != null) ...[leading!, const SizedBox(width: 14)],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600,
+                        color: p.title,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 1),
+                      Text(
+                        subtitle!,
+                        style: TextStyle(fontSize: 13, color: p.muted),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              AppIcon(trailing, size: 20, color: p.faint),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+/// System / Light / Dark as a native sliding segmented control.
+class _ThemePicker extends StatelessWidget {
+  const _ThemePicker({required this.mode, required this.onChanged});
+  final ThemeMode mode;
+  final ValueChanged<ThemeMode> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    Widget segment(ThemeMode m, AppGlyph icon, String label) {
+      final selected = m == mode;
+      final color = selected ? p.title : p.muted;
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppIcon(icon, size: 20, color: selected ? p.accent : p.muted),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: AppFonts.sans,
+                fontSize: 13.5,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      child: CupertinoSlidingSegmentedControl<ThemeMode>(
+        groupValue: mode,
+        backgroundColor: p.surface,
+        thumbColor: p.accentDeep,
+        padding: const EdgeInsets.all(4),
+        onValueChanged: (m) {
+          if (m != null) onChanged(m);
+        },
+        children: {
+          ThemeMode.system: segment(ThemeMode.system, AppGlyph.auto, 'System'),
+          ThemeMode.light: segment(ThemeMode.light, AppGlyph.sun, 'Light'),
+          ThemeMode.dark: segment(ThemeMode.dark, AppGlyph.moon, 'Dark'),
+        },
       ),
     );
   }
@@ -542,13 +595,10 @@ class _SwitchRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      splashColor: p.accent.withValues(alpha: .10),
-      highlightColor: p.accent.withValues(alpha: .05),
+    return RowButton(
       onTap: () => onChanged(!value),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 10, 8),
+        padding: const EdgeInsets.fromLTRB(16, 8, 14, 8),
         child: Row(
           children: [
             Expanded(
@@ -558,7 +608,7 @@ class _SwitchRow extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15.5,
                       fontWeight: FontWeight.w600,
                       color: p.title,
                     ),
@@ -572,7 +622,7 @@ class _SwitchRow extends StatelessWidget {
                             height: 1.5,
                             color: p.muted,
                           )
-                        : TextStyle(fontSize: 12.5, color: p.muted),
+                        : TextStyle(fontSize: 13, color: p.muted),
                   ),
                 ],
               ),

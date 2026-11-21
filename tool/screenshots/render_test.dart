@@ -46,7 +46,6 @@ void main() {
         'GoogleSans-SemiBold.ttf',
         'GoogleSans-Bold.ttf',
       ],
-      AppFonts.display: ['Boldonse-Regular.ttf'],
       AppFonts.arabic: ['PDMSSaleemQuran.ttf'],
       AppFonts.urdu: ['JameelNooriNastaleeq.ttf'],
     }.entries) {

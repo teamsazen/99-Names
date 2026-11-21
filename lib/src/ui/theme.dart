@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 
 /// Every colour the app paints with. Light and dark share one shape, so each
 /// widget reads `context.palette` and both themes keep the same look.
+///
+/// One accent, locked: bronze-gold. It marks the sacred text, the active
+/// state and the primary action, nothing else. Neutrals carry the rest, and
+/// the ink [hero] surface (the colour of the app icon) is the brand moment.
 @immutable
 class AppPalette extends ThemeExtension<AppPalette> {
   const AppPalette({
@@ -24,14 +28,22 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.shadow,
     required this.logoBackground,
     required this.logoInk,
+    required this.hero,
+    required this.onHero,
+    required this.heroMuted,
   });
 
   final Color background;
   final Color surface;
   final Color surfaceRaised;
   final Color border;
+
+  /// The one accent. [gold] is the same colour, kept for readability where
+  /// the meaning is "sacred" rather than "interactive".
   final Color accent;
   final Color onAccent;
+
+  /// Accent tint for selected backgrounds and badges.
   final Color accentDeep;
   final Color gold;
   final Color title;
@@ -45,45 +57,53 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color logoBackground;
   final Color logoInk;
 
-  /// Ink-blue canvas with soft blue and muted bronze accents.
+  /// Deep ink brand surface, used for hero blocks in both themes.
+  final Color hero;
+  final Color onHero;
+  final Color heroMuted;
+
   static const dark = AppPalette(
     logoBackground: Color(0xFF101820),
     logoInk: Color(0xFFD9BC89),
-    background: Color(0xFF101820),
-    surface: Color(0xFF18232E),
-    surfaceRaised: Color(0xFF21303D),
-    border: Color(0xFF30404E),
-    accent: Color(0xFFA5C5DE),
-    onAccent: Color(0xFF142838),
-    accentDeep: Color(0xFF293F50),
+    background: Color(0xFF0A0E12),
+    surface: Color(0xFF151B21),
+    surfaceRaised: Color(0xFF1F272E),
+    border: Color(0xFF262F37),
+    accent: Color(0xFFD9BC89),
+    onAccent: Color(0xFF14100A),
+    accentDeep: Color(0xFF2A241A),
     gold: Color(0xFFD9BC89),
-    title: Colors.white,
-    body: Color(0xFFC9D1D8),
-    muted: Color(0xFFA0AFBB),
-    faint: Color(0xFF758693),
-    patternInk: Colors.white,
-    shadow: Color(0x66000000),
+    title: Color(0xFFF4F1EA),
+    body: Color(0xFFC9C4BA),
+    muted: Color(0xFF9A958B),
+    faint: Color(0xFF6B675F),
+    patternInk: Color(0xFFD9BC89),
+    shadow: Color(0x00000000),
+    hero: Color(0xFF16202A),
+    onHero: Color(0xFFF7F3EA),
+    heroMuted: Color(0xFFA9B2B9),
   );
 
-  /// Warm ivory canvas with blue and bronze, deepened for
-  /// contrast on a light ground.
   static const light = AppPalette(
     logoBackground: Color(0xFF101820),
     logoInk: Color(0xFFD9BC89),
-    background: Color(0xFFFAF8F3),
+    background: Color(0xFFF6F3EC),
     surface: Color(0xFFFFFFFF),
-    surfaceRaised: Color(0xFFEFEDE6),
-    border: Color(0xFFE3E5E4),
-    accent: Color(0xFF345F7B),
+    surfaceRaised: Color(0xFFECE7DC),
+    border: Color(0xFFE6E0D4),
+    accent: Color(0xFF86622B),
     onAccent: Colors.white,
-    accentDeep: Color(0xFFE5EDF2),
-    gold: Color(0xFF906C38),
-    title: Color(0xFF1B2B36),
-    body: Color(0xFF455865),
-    muted: Color(0xFF667985),
-    faint: Color(0xFF8B9BA5),
-    patternInk: Color(0xFF345F7B),
-    shadow: Color(0x1A345F7B),
+    accentDeep: Color(0xFFF3EADB),
+    gold: Color(0xFF86622B),
+    title: Color(0xFF1A1712),
+    body: Color(0xFF4A453D),
+    muted: Color(0xFF7A7368),
+    faint: Color(0xFFA9A195),
+    patternInk: Color(0xFF86622B),
+    shadow: Color(0x141A1712),
+    hero: Color(0xFF101820),
+    onHero: Color(0xFFF7F3EA),
+    heroMuted: Color(0xFFA9B2B9),
   );
 
   @override
@@ -94,8 +114,6 @@ class AppPalette extends ThemeExtension<AppPalette> {
     if (other == null) return this;
     Color l(Color a, Color b) => Color.lerp(a, b, t)!;
     return AppPalette(
-      logoBackground: l(logoBackground, other.logoBackground),
-      logoInk: l(logoInk, other.logoInk),
       background: l(background, other.background),
       surface: l(surface, other.surface),
       surfaceRaised: l(surfaceRaised, other.surfaceRaised),
@@ -110,15 +128,42 @@ class AppPalette extends ThemeExtension<AppPalette> {
       faint: l(faint, other.faint),
       patternInk: l(patternInk, other.patternInk),
       shadow: l(shadow, other.shadow),
+      logoBackground: l(logoBackground, other.logoBackground),
+      logoInk: l(logoInk, other.logoInk),
+      hero: l(hero, other.hero),
+      onHero: l(onHero, other.onHero),
+      heroMuted: l(heroMuted, other.heroMuted),
     );
   }
 }
 
 abstract final class AppFonts {
   static const sans = 'Google Sans';
-  static const display = 'Boldonse';
   static const arabic = 'PDMS Saleem Quran';
   static const urdu = 'Jameel Noori Nastaleeq';
+}
+
+/// Shape lock: actions and inputs are pills, cards are [card], small
+/// thumbnails are [tile], icon squares are [icon]. Nothing else.
+abstract final class AppRadius {
+  static const card = 24.0;
+  static const tile = 16.0;
+  static const icon = 8.0;
+}
+
+/// Motion tokens. Strong ease-out for things entering or responding, short
+/// durations, and a faster exit than entry.
+abstract final class AppMotion {
+  static const easeOut = Cubic(0.23, 1, 0.32, 1);
+  static const easeInOut = Cubic(0.77, 0, 0.175, 1);
+
+  /// iOS-like sheet / page curve.
+  static const drawer = Cubic(0.32, 0.72, 0, 1);
+
+  static const press = Duration(milliseconds: 100);
+  static const release = Duration(milliseconds: 180);
+  static const fast = Duration(milliseconds: 200);
+  static const page = Duration(milliseconds: 380);
 }
 
 ThemeData buildTheme(Brightness brightness) {
@@ -170,17 +215,23 @@ ThemeData buildTheme(Brightness brightness) {
     ),
     snackBarTheme: SnackBarThemeData(
       behavior: SnackBarBehavior.floating,
-      backgroundColor: dark ? const Color(0xFF293F50) : const Color(0xFF203747),
-      contentTextStyle: const TextStyle(
+      backgroundColor: p.title,
+      elevation: 0,
+      shape: const StadiumBorder(),
+      contentTextStyle: TextStyle(
         fontFamily: AppFonts.sans,
-        color: Colors.white,
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: p.background,
       ),
     ),
     sliderTheme: SliderThemeData(
       activeTrackColor: p.accent,
       thumbColor: p.accent,
-      inactiveTrackColor: p.border,
+      inactiveTrackColor: p.surfaceRaised,
     ),
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: Colors.transparent,
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: p.accent,
       selectionColor: p.accent.withValues(alpha: .3),

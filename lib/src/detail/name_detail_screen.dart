@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../data/names.dart';
 import '../settings/settings_store.dart';
+import '../ui/icons.dart';
+import '../ui/motion.dart';
 import '../ui/theme.dart';
 import '../ui/widgets.dart';
 
@@ -12,10 +14,15 @@ class NameDetailScreen extends StatefulWidget {
     super.key,
     required this.names,
     required this.initialIndex,
+    this.heroPrefix = 'all',
   });
 
   final List<DivineName> names;
   final int initialIndex;
+
+  /// Which home surface the name was opened from, so its Arabic flies back
+  /// to the same place.
+  final String heroPrefix;
 
   @override
   State<NameDetailScreen> createState() => _NameDetailScreenState();
@@ -35,12 +42,13 @@ class _NameDetailScreenState extends State<NameDetailScreen> {
 
   void _go(int delta) => _pages.animateToPage(
     _index + delta,
-    duration: const Duration(milliseconds: 320),
-    curve: Curves.easeOutCubic,
+    duration: AppMotion.page,
+    curve: AppMotion.drawer,
   );
 
   void _copy() {
     final n = _name;
+    HapticFeedback.selectionClick();
     Clipboard.setData(
       ClipboardData(
         text:
@@ -55,285 +63,302 @@ class _NameDetailScreenState extends State<NameDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.palette;
     final s = SettingsStore.instance;
-    return ListenableBuilder(
-      listenable: s,
-      builder: (context, _) => Scaffold(
-        body: Stack(
-          children: [
-            const Positioned.fill(
-              child: IslamicPattern(
-                style: PatternStyle.hexagons,
-                cell: 70,
-                opacity: .012,
-              ),
-            ),
-            SafeArea(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
+    final p = context.palette;
+    final last = widget.names.length - 1;
+    // The ink hero sits under the status bar in both themes.
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: p.background,
+      ),
+      child: ListenableBuilder(
+        listenable: s,
+        builder: (context, _) => Scaffold(
+          body: Column(
+            children: [
+              ColoredBox(
+                color: p.hero,
+                child: SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
                     child: Row(
                       children: [
-                        HeaderButton(
-                          icon: Icons.arrow_back_rounded,
+                        CircleButton(
+                          glyph: AppGlyph.back,
                           tooltip: 'Back',
+                          onHero: true,
                           onTap: () => Navigator.of(context).pop(),
                         ),
-                        Expanded(
-                          child: Text(
-                            '${_name.number} of 99',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: p.muted,
-                            ),
-                          ),
-                        ),
-                        HeaderButton(
-                          icon: Icons.copy_rounded,
+                        Expanded(child: _Progress(number: _name.number)),
+                        CircleButton(
+                          glyph: AppGlyph.copy,
                           tooltip: 'Copy',
+                          iconSize: 19,
+                          onHero: true,
                           onTap: _copy,
                         ),
                         const SizedBox(width: 8),
-                        HeaderButton(
-                          icon: s.isFavourite(_name.number)
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          tooltip: 'Favourite',
-                          active: s.isFavourite(_name.number),
-                          onTap: () {
-                            HapticFeedback.selectionClick();
-                            s.toggleFavourite(_name.number);
-                          },
+                        HeartButton(
+                          favourite: s.isFavourite(_name.number),
+                          onHero: true,
+                          onChanged: () => s.toggleFavourite(_name.number),
                         ),
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: PageView.builder(
-                      controller: _pages,
-                      itemCount: widget.names.length,
-                      onPageChanged: (i) => setState(() => _index = i),
-                      itemBuilder: (_, i) => _NamePage(name: widget.names[i]),
-                    ),
+                ),
+              ),
+              Expanded(
+                child: PageView.builder(
+                  controller: _pages,
+                  itemCount: widget.names.length,
+                  onPageChanged: (i) {
+                    HapticFeedback.selectionClick();
+                    setState(() => _index = i);
+                  },
+                  itemBuilder: (_, i) => _NamePage(
+                    name: widget.names[i],
+                    heroTag: '${widget.heroPrefix}-${widget.names[i].number}',
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 6, 20, 12),
-                    child: Row(
-                      children: [
-                        _NavButton(
-                          icon: Icons.chevron_left_rounded,
+                ),
+              ),
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: PillButton(
+                          glyph: AppGlyph.back,
                           label: _index > 0
                               ? widget.names[_index - 1].transliteration
-                              : null,
+                              : 'Previous',
                           onTap: _index > 0 ? () => _go(-1) : null,
                         ),
-                        const SizedBox(width: 8),
-                        _NavButton(
-                          icon: Icons.chevron_right_rounded,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: PillButton(
+                          glyph: AppGlyph.forward,
                           trailingIcon: true,
-                          label: _index < widget.names.length - 1
+                          filled: true,
+                          label: _index < last
                               ? widget.names[_index + 1].transliteration
-                              : null,
-                          onTap: _index < widget.names.length - 1
-                              ? () => _go(1)
-                              : null,
+                              : 'Next',
+                          onTap: _index < last ? () => _go(1) : null,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+/// "12 of 99" with a thin gold bar showing how far through the names you
+/// are; the number rolls as you swipe.
+class _Progress extends StatelessWidget {
+  const _Progress({required this.number});
+  final int number;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Swap(
+          value: number,
+          child: Text(
+            '$number of 99',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              fontFeatures: const [FontFeature.tabularFigures()],
+              color: p.heroMuted,
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          width: 64,
+          height: 3,
+          decoration: ShapeDecoration(
+            color: p.onHero.withValues(alpha: .14),
+            shape: const StadiumBorder(),
+          ),
+          alignment: Alignment.centerLeft,
+          child: TweenAnimationBuilder<double>(
+            tween: Tween(end: number / 99),
+            duration: AppMotion.page,
+            curve: AppMotion.easeOut,
+            builder: (_, v, _) => FractionallySizedBox(
+              widthFactor: v,
+              child: DecoratedBox(
+                decoration: ShapeDecoration(
+                  color: p.logoInk,
+                  shape: const StadiumBorder(),
+                ),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
 
 class _NamePage extends StatelessWidget {
-  const _NamePage({required this.name});
+  const _NamePage({required this.name, required this.heroTag});
   final DivineName name;
+  final String heroTag;
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
     final s = SettingsStore.instance;
+    final side = context.r(16);
+    const shoulders = BorderRadius.vertical(bottom: Radius.circular(36));
     return ListView(
-      padding: EdgeInsets.fromLTRB(context.r(12), 8, context.r(12), 16),
+      padding: EdgeInsets.only(bottom: context.r(20)),
       children: [
-        PatternCard(
-          highlight: true,
-          intensity: 2,
-          radius: 16,
-          padding: EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: context.r(24),
+        // Ink hero continuing seamlessly from the header.
+        DecoratedBox(
+          decoration: ShapeDecoration(
+            color: p.hero,
+            shape: const RoundedSuperellipseBorder(borderRadius: shoulders),
           ),
-          child: Column(
-            children: [
-              Eyebrow('NAME ${name.number}', color: p.accent),
-              SizedBox(height: context.r(10)),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: context.r(18)),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    name.arabic,
-                    maxLines: 1,
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(
-                      fontFamily: AppFonts.arabic,
-                      fontSize: context.r(92) * s.arabicScale,
-                      color: p.title,
-                    ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(24, 0, 24, context.r(30)),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: context.r(260),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      RosetteIn(
+                        size: context.r(240),
+                        color: p.logoInk.withValues(alpha: .34),
+                      ),
+                      Hero(
+                        tag: heroTag,
+                        flightShuttleBuilder: arabicFlight,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            name.arabic,
+                            maxLines: 1,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              fontFamily: AppFonts.arabic,
+                              fontSize: context.r(80) * s.arabicScale,
+                              height: 1.5,
+                              color: p.logoInk,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              SizedBox(height: context.r(12)),
-              if (s.showTransliteration)
-                EditorialTitle(
-                  name.transliteration,
-                  size: 22,
-                  textAlign: TextAlign.center,
-                ),
-              if (s.showEnglish) ...[
-                const SizedBox(height: 6),
-                Text(
-                  name.english,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: context.r(16),
-                    fontWeight: FontWeight.w600,
-                    color: p.body,
+                Reveal(
+                  delay: const Duration(milliseconds: 120),
+                  child: Column(
+                    children: [
+                      if (s.showTransliteration)
+                        Text(
+                          name.transliteration,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: context.r(30),
+                            height: 1.15,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -.9,
+                            color: p.onHero,
+                          ),
+                        ),
+                      if (s.showEnglish) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          name.english,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: context.r(17),
+                            fontWeight: FontWeight.w500,
+                            color: p.heroMuted,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
-            ],
-          ),
-        ),
-        if (s.showUrdu) ...[
-          const SizedBox(height: 12),
-          _InfoCard(
-            eyebrow: 'URDU MEANING',
-            child: Text(
-              name.urdu,
-              textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
-              style: TextStyle(
-                fontFamily: AppFonts.urdu,
-                fontSize: context.r(32),
-                height: 1.7,
-                color: p.title,
-              ),
-            ),
-          ),
-        ],
-        const SizedBox(height: 12),
-        _InfoCard(
-          eyebrow: 'REFLECTION',
-          tint: p.gold,
-          child: Text(
-            name.explanation,
-            style: TextStyle(fontSize: 16, height: 1.55, color: p.body),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _InfoCard extends StatelessWidget {
-  const _InfoCard({required this.eyebrow, required this.child, this.tint});
-  final String eyebrow;
-  final Widget child;
-  final Color? tint;
-
-  @override
-  Widget build(BuildContext context) => PatternCard(
-    tint: tint,
-    intensity: .6,
-    padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Eyebrow(eyebrow, color: tint),
-        const SizedBox(height: 6),
-        child,
-      ],
-    ),
-  );
-}
-
-class _NavButton extends StatelessWidget {
-  const _NavButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.trailingIcon = false,
-  });
-
-  final IconData icon;
-  final String? label;
-  final VoidCallback? onTap;
-  final bool trailingIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    final enabled = onTap != null;
-    final text = Flexible(
-      child: Text(
-        label ?? '',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: p.title,
-        ),
-      ),
-    );
-    final arrow = Icon(icon, size: 22, color: p.accent);
-    return Expanded(
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 200),
-        opacity: enabled ? 1 : .35,
-        child: Material(
-          color: p.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-            side: BorderSide(color: p.border),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: SizedBox(
-              height: 48,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: trailingIcon
-                    ? [
-                        const SizedBox(width: 12),
-                        text,
-                        arrow,
-                        const SizedBox(width: 8),
-                      ]
-                    : [
-                        const SizedBox(width: 8),
-                        arrow,
-                        text,
-                        const SizedBox(width: 12),
-                      ],
-              ),
             ),
           ),
         ),
-      ),
+        SizedBox(height: context.r(24)),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: side),
+          child: Reveal(
+            delay: const Duration(milliseconds: 220),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (s.showUrdu) ...[
+                  GroupedSection(
+                    label: 'Urdu meaning',
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+                        child: Text(
+                          name.urdu,
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                            fontFamily: AppFonts.urdu,
+                            fontSize: context.r(30),
+                            height: 1.7,
+                            color: p.title,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+                GroupedSection(
+                  label: 'Reflection',
+                  labelColor: p.gold,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+                      child: Text(
+                        name.explanation,
+                        style: TextStyle(
+                          fontSize: 17,
+                          height: 1.6,
+                          color: p.body,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'src/home/home_screen.dart';
 import 'src/settings/settings_store.dart';
+import 'src/ui/motion.dart';
 import 'src/ui/theme.dart';
 import 'src/update/app_update.dart';
 
@@ -17,13 +18,10 @@ Future<void> main() async {
   unawaited(checkForAppUpdate());
 }
 
-/// The Open Font License travels with Google Sans and Boldonse; Flutter's
+/// The Open Font License travels with Google Sans; Flutter's
 /// licence page (Settings → Open-source licences) lists them.
 void _registerFontLicenses() {
-  for (final (font, file) in const [
-    ('Google Sans', 'GoogleSans-OFL.txt'),
-    ('Boldonse', 'Boldonse-OFL.txt'),
-  ]) {
+  for (final (font, file) in const [('Google Sans', 'GoogleSans-OFL.txt')]) {
     LicenseRegistry.addLicense(() async* {
       final text = await rootBundle.loadString('assets/licenses/$file');
       yield LicenseEntryWithLineBreaks([font], text);
@@ -48,12 +46,15 @@ class AsmaulHusnaApp extends StatelessWidget {
         final base = context.isDark
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark;
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: base.copyWith(
-            statusBarColor: Colors.transparent,
-            systemNavigationBarColor: context.palette.background,
+        // A light/dark switch grows in as a circle from the tap.
+        return ThemeReveal(
+          child: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: base.copyWith(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: context.palette.background,
+            ),
+            child: child!,
           ),
-          child: child!,
         );
       },
       home: const HomeScreen(),

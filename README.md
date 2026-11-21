@@ -36,7 +36,6 @@ For reproducible app captures and Play Store artwork, see [the screenshot guide]
 | Jameel Noori Nastaleeq | Urdu | [urdufonts.net](https://urdufonts.net/fonts/jameel-noori-nastaleeq-regular) | Free of charge for Urdu lovers |
 | PDMS Saleem Quran | Arabic | [urdunigaar.com](https://urdunigaar.com/download/pdms-saleem-quran-font-ttf-file-download/) | © 2001 Pakistan Data Management Services |
 | Google Sans | Text | [Google Fonts](https://fonts.google.com/specimen/Google+Sans) | SIL OFL 1.1 |
-| Boldonse | Titles | [Google Fonts](https://fonts.google.com/specimen/Boldonse) | SIL OFL 1.1 |
 
 The same credits appear in the app under Settings → Fonts & credits.
 

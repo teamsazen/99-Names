@@ -121,6 +121,5 @@ for weight, style in [(400, "Regular"), (600, "SemiBold"), (700, "Bold")]:
     s.subset(static)
     save(static, f"GoogleSans-{style}.ttf", sans.stat().st_size)
 
-subset_chars(src / "Boldonse-Regular.ttf", ascii_, "Boldonse-Regular.ttf")
 subset_chars(src / "PDMS_Saleem_QuranFont.ttf", arabic, "PDMSSaleemQuran.ttf")
 subset_shaped(src / "JameelNooriNastaleeq.ttf", urdu_strings, "JameelNooriNastaleeq.ttf")
