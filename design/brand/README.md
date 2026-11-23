@@ -27,7 +27,7 @@ lettering under launcher masks.
   `Wordmark.kt`, the outlines of `wordmark.svg` as Compose paths. No SVG library
   and no font loading at startup.
 - The launcher icons (`native/app/src/main/res/mipmap-*`), the Play Store icon
-  (`store/app_icon.png`), the website icons and `.github/readme/icon.png` are
+  (`store/app_icon.png`) and the website icons are
   exports of `app-icon.svg`. After changing it, export them again at the same
   sizes.
 
