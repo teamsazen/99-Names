@@ -52,3 +52,13 @@ app.*.map.json
 
 # Social post plan (local only)
 /LINKEDIN-POSTS.md
+
+# Firebase config (project keys); kept out of this public repo. Builds work
+# without them, just with analytics off.
+google-services.json
+/lib/firebase_options.dart
+/firebase.json
+
+# Store listing renders; the finished set is copied to store/playstore/
+/store/listing/out/
+/store/listing/_preview.png
