@@ -1,0 +1,8 @@
+.gradle/
+.kotlin/
+build/
+local.properties
+# Firebase config for the release build; kept out of this public repo.
+app/google-services.json
+# Paparazzi renders (cd native && ./gradlew :app:recordPaparazziDebug)
+app/src/test/snapshots/
