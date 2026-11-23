@@ -21,22 +21,16 @@ larger for reading the full phrase; at favicon sizes it serves as a recognisable
 silhouette. Android foreground and monochrome layers use 66% scale to protect
 lettering under launcher masks.
 
-## Regenerate
+## Where it is used
 
-From the repository root:
+- In the app, `AppLogo` (`native/…/ui/AppLogo.kt`) draws the lettering from
+  `Wordmark.kt`, the outlines of `wordmark.svg` as Compose paths. No SVG library
+  and no font loading at startup.
+- The launcher icons (`native/app/src/main/res/mipmap-*`), the Play Store icon
+  (`store/app_icon.png`), the website icons and `.github/readme/icon.png` are
+  exports of `app-icon.svg`. After changing it, export them again at the same
+  sizes.
 
-```sh
-python3 tool/icon/build_wordmark.py
-dart format lib/src/ui/wordmark_path.dart
-tool/icon/make_icons.sh
-tool/screenshots/make_screenshots.sh
-```
-
-The compiler converts SVG outlines directly to Dart paths; it does not require an
-SVG runtime dependency or font loading at app startup. After edits to app text,
-run `tool/subset_fonts.py` before rendering, as described in the main README.
-
-Native and web icon exports come from the same Flutter `AppLogo` widget. The
-square source deliberately has no rounded corners; launcher masks and UI widgets
-apply their own corner treatment. Third-party font terms and the project's
-branding policy continue to apply.
+The square source deliberately has no rounded corners; launcher masks and UI
+widgets apply their own corner treatment. Third-party font terms and the
+project's branding policy continue to apply.

@@ -23,32 +23,8 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-/coverage/
-
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
 # Full source fonts; download them as described in tool/fonts_src/README.md
 /tool/fonts_src/*.ttf
-
-# Icon renders from tool/icon/make_icons.sh
-/branding/
 
 # Social post plan (local only)
 /LINKEDIN-POSTS.md
@@ -56,8 +32,6 @@ app.*.map.json
 # Firebase config (project keys); kept out of this public repo. Builds work
 # without them, just with analytics off.
 google-services.json
-/lib/firebase_options.dart
-/firebase.json
 
 # Store listing renders; the finished set is copied to store/playstore/
 /store/listing/out/

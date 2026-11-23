@@ -6,3 +6,5 @@ local.properties
 app/google-services.json
 # Paparazzi renders (cd native && ./gradlew :app:recordPaparazziDebug)
 app/src/test/snapshots/
+# Upload key settings (storeFile, passwords); never commit.
+key.properties

@@ -27,7 +27,7 @@ class DataTest {
     }
 
     @Test fun nameOfTheDayMatchesTheWebsite() {
-        // 21 November 2026 is Name 88, Al-Ghaniyy, on the website and in the Flutter app.
+        // 21 November 2026 is Name 88, Al-Ghaniyy, on the website and in the 1.0.0 app.
         val day = GregorianCalendar(2026, Calendar.NOVEMBER, 21, 9, 30)
         assertEquals(88, nameOfTheDay(day).number)
     }

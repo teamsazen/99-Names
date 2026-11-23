@@ -1,11 +1,14 @@
-"""Trims the bundled fonts to what the app actually draws.
+"""Trims the fonts to what the app and the website actually draw.
 
-Run after changing any text in lib/:
-    pip install fonttools uharfbuzz
+Run after changing any text in the app (native/) or the website's Arabic or Urdu:
+    pip install fonttools uharfbuzz brotli
     python3 tool/subset_fonts.py
 
 Full source fonts are not committed; download them into tool/fonts_src/
-(see tool/fonts_src/README.md). Trimmed copies go to assets/fonts/.
+(see tool/fonts_src/README.md). Writes:
+- native/app/src/main/res/font/: google_sans_*.ttf, harmattan.ttf, nastaleeq.ttf
+- website/public/fonts/: harmattan.woff2, nastaleeq.ttf
+(the website's google-sans.woff2 is a full copy and is left alone)
 """
 import pathlib
 import re
@@ -18,18 +21,27 @@ from fontTools.varLib import instancer
 
 root = pathlib.Path(__file__).resolve().parent.parent
 src = root / "tool" / "fonts_src"
-out_dir = root / "assets" / "fonts"
-text = "".join(p.read_text(encoding="utf-8") for p in (root / "lib").rglob("*.dart"))
-literals = re.findall(r"'([^'\n]*)'", text)
+app_fonts = root / "native" / "app" / "src" / "main" / "res" / "font"
+web_fonts = root / "website" / "public" / "fonts"
+
+kotlin = "".join(
+    p.read_text(encoding="utf-8")
+    for p in (root / "native" / "app" / "src" / "main" / "java").rglob("*.kt")
+)
+literals = [m.replace('\\"', '"') for m in re.findall(r'"((?:[^"\\\n]|\\.)*)"', kotlin)]
+web_text = "".join(p.read_text(encoding="utf-8") for p in (root / "website" / "src").glob("*.html"))
 
 ascii_ = "".join(chr(c) for c in range(0x20, 0x7F))
-latin = ascii_ + "".join(sorted({c for c in text if 0x80 <= ord(c) < 0x600})) + "—’…"
-arabic = "".join(sorted({c for c in text if re.match("[؀-ۿﹰ-﻿]", c)}))
-arabic += "".join(chr(c) for c in range(0x0660, 0x066A)) + "،۝ "
+latin = ascii_ + "".join(sorted({c for c in kotlin if 0x80 <= ord(c) < 0x600})) + "—’…©°"
+
+# Arabic: the letters and marks of the 99 Names (the field after the number).
+names_kt = (root / "native/app/src/main/java/com/muzamil/asmaulhusna/data/Names.kt").read_text(encoding="utf-8")
+arabic = "".join(re.findall(r'DivineName\(\s*\d+,\s*"([^"]*)"', names_kt)) + " "
 
 # Urdu strings are the ones using Urdu-only letters (ے ہ ی ک گ ں ٹ ڈ ڑ ھ).
 urdu_letters = "[ےہیکگںٹڈڑھ]"
-urdu_strings = [s for s in literals if re.search(urdu_letters, s)]
+urdu_app = [s for s in literals if re.search(urdu_letters, s)]
+urdu_web = re.findall(r'lang="ur"[^>]*>([^<]+)<', web_text)
 
 
 def options():
@@ -41,20 +53,20 @@ def options():
     return o
 
 
-def save(font, name, src_size):
-    out = out_dir / name
+def save(font, out, src_size, flavor=None):
+    font.flavor = flavor
     font.save(str(out))
-    print(f"{name}: {src_size // 1024} KB -> {out.stat().st_size // 1024} KB")
+    print(f"{out.relative_to(root)}: {src_size // 1024} KB -> {out.stat().st_size // 1024} KB")
     return out
 
 
-def subset_chars(path, chars, name, font=None):
+def subset_chars(path, chars, out, flavor=None):
     o = options()
-    font = font or subset.load_font(str(path), o)
+    font = subset.load_font(str(path), o)
     s = subset.Subsetter(o)
     s.populate(text=chars)
     s.subset(font)
-    return save(font, name, path.stat().st_size)
+    return save(font, out, path.stat().st_size, flavor)
 
 
 def shape(path, strings, gids=None):
@@ -89,7 +101,7 @@ def shape(path, strings, gids=None):
     return runs
 
 
-def subset_shaped(path, strings, name):
+def subset_shaped(path, strings, out):
     """Keeps only the glyphs the given strings shape to. Nastaliq fonts hold
     thousands of precomposed ligatures, so this is far smaller than keeping
     every glyph reachable from the characters."""
@@ -101,25 +113,25 @@ def subset_shaped(path, strings, name):
     s = subset.Subsetter(o)
     s.populate(gids=gids, text="".join(strings) + " ۔")
     s.subset(font)
-    out = save(font, name, path.stat().st_size)
+    save(font, out, path.stat().st_size)
     if shape(out, strings) != before:
-        sys.exit(f"{name}: shaping changed after trimming; keep more glyphs")
+        sys.exit(f"{out.name}: shaping changed after trimming; keep more glyphs")
 
-
-out_dir.mkdir(exist_ok=True)
-for old in out_dir.glob("*.ttf"):
-    old.unlink()
 
 sans = src / "GoogleSans[GRAD,opsz,wght].ttf"
-for weight, style in [(400, "Regular"), (600, "SemiBold"), (700, "Bold")]:
+for weight, style in [(400, "regular"), (600, "semibold"), (700, "bold")]:
     static = instancer.instantiateVariableFont(
         TTFont(str(sans)), {"wght": weight, "opsz": 18, "GRAD": 0}
     )
-    o = options()
-    s = subset.Subsetter(o)
+    s = subset.Subsetter(options())
     s.populate(text=latin)
     s.subset(static)
-    save(static, f"GoogleSans-{style}.ttf", sans.stat().st_size)
+    save(static, app_fonts / f"google_sans_{style}.ttf", sans.stat().st_size)
 
-subset_chars(src / "PDMS_Saleem_QuranFont.ttf", arabic, "PDMSSaleemQuran.ttf")
-subset_shaped(src / "JameelNooriNastaleeq.ttf", urdu_strings, "JameelNooriNastaleeq.ttf")
+harmattan = src / "Harmattan-Regular.ttf"
+subset_chars(harmattan, arabic, app_fonts / "harmattan.ttf")
+subset_chars(harmattan, arabic, web_fonts / "harmattan.woff2", "woff2")
+
+nastaleeq = src / "JameelNooriNastaleeq.ttf"
+subset_shaped(nastaleeq, urdu_app, app_fonts / "nastaleeq.ttf")
+subset_shaped(nastaleeq, urdu_app + urdu_web, web_fonts / "nastaleeq.ttf")

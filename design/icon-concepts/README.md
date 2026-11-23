@@ -1,6 +1,6 @@
 # Urdu icon studies — A selected
 
-Brief: replace the Allah-wordmark icon with Urdu **اسماء الحسنیٰ**, inspired by Rafeeq's calligraphic wordmark. Keep the new ink-blue (#101820) and muted bronze (#D9BC89) identity. The app icon, Android adaptive/themed assets, iOS icons, website assets, and screenshots containing the icon should use the same approved mark.
+Brief: replace the Allah-wordmark icon with Urdu **اسماء الحسنیٰ**, inspired by Rafeeq's calligraphic wordmark. Keep the new ink-blue (#101820) and muted bronze (#D9BC89) identity. The app icon, Android adaptive/themed assets, website assets, and screenshots containing the icon should use the same approved mark.
 
 These are font-derived vector studies using the project's existing Jameel Noori Nastaleeq source font, with custom layout and flourishes. The exported SVGs use outlined paths, not live text. Font credit remains the existing project credit.
 

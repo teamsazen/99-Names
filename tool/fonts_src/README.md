@@ -7,5 +7,5 @@ run `python3 tool/subset_fonts.py`:
 | File | Source |
 |---|---|
 | `GoogleSans[GRAD,opsz,wght].ttf` | [Google Fonts — Google Sans](https://fonts.google.com/specimen/Google+Sans) ([GitHub](https://github.com/google/fonts/tree/main/ofl/googlesans)), SIL OFL 1.1 |
-| `PDMS_Saleem_QuranFont.ttf` | [urdunigaar.com](https://urdunigaar.com/download/pdms-saleem-quran-font-ttf-file-download/) — © 2001 Pakistan Data Management Services |
+| `Harmattan-Regular.ttf` | [Google Fonts — Harmattan](https://fonts.google.com/specimen/Harmattan), SIL OFL 1.1 · SIL International |
 | `JameelNooriNastaleeq.ttf` | [urdufonts.net](https://urdufonts.net/fonts/jameel-noori-nastaleeq-regular) — free of charge for Urdu lovers |

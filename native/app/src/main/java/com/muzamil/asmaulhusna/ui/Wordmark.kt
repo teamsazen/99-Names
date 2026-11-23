@@ -1,4 +1,4 @@
-// Generated from lib/src/ui/wordmark_path.dart by tool/native/gen_kotlin.py. Do not edit.
+// Outlines of design/brand/wordmark.svg.
 // Urdu: اسماء الحسنیٰ, outlined Nastaleeq on a 256-unit canvas.
 package com.muzamil.asmaulhusna.ui
 

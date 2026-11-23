@@ -1,4 +1,4 @@
-// Generated from lib/src/data/names.dart by tool/native/gen_kotlin.py. Do not edit.
+// The 99 Names: the one source of truth for the app and the website (website/build.mjs reads this file).
 package com.muzamil.asmaulhusna.data
 
 /** One of the 99 beautiful names of Allah. */

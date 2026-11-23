@@ -1,5 +1,5 @@
 // Builds the Asmaul Husna website into dist/: copies public/, fills src/index.html
-// with all 99 Names read straight from the app's lib/src/data/names.dart (so the
+// with all 99 Names read straight from the app's Names.kt (so the
 // site never drifts from the app), writes one page per Name from src/name.html at
 // /names/<name>, and a sitemap listing every page.
 // Run: node build.mjs
@@ -12,16 +12,16 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(here, 'dist');
 const SITE = 'https://99.teamsazen.com';
 
-// Dart string literal, single or double quoted, with escapes.
-const literal = String.raw`'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"`;
+// Kotlin string literal, with escapes.
+const literal = String.raw`"(?:[^"\\]|\\.)*"`;
 const unquote = (s) => s.slice(1, -1).replace(/\\(.)/g, '$1');
 
-const dart = await readFile(path.join(here, '..', 'lib/src/data/names.dart'), 'utf8');
+const kotlin = await readFile(path.join(here, '..', 'native/app/src/main/java/com/muzamil/asmaulhusna/data/Names.kt'), 'utf8');
 const entry = new RegExp(
   String.raw`DivineName\(\s*(\d+),\s*(${literal}),\s*(${literal}),\s*(${literal}),\s*(${literal}),\s*(${literal}),?\s*\)`,
   'g',
 );
-const names = [...dart.matchAll(entry)].map((m) => ({
+const names = [...kotlin.matchAll(entry)].map((m) => ({
   number: Number(m[1]),
   arabic: unquote(m[2]),
   transliteration: unquote(m[3]),
@@ -29,7 +29,7 @@ const names = [...dart.matchAll(entry)].map((m) => ({
   urdu: unquote(m[5]),
   reflection: unquote(m[6]),
 }));
-if (names.length !== 99) throw new Error(`Expected 99 names in names.dart, found ${names.length}`);
+if (names.length !== 99) throw new Error(`Expected 99 names in Names.kt, found ${names.length}`);
 
 // URL slug from the transliteration ("Al-Mu'min" -> "al-mumin"). Two Names share
 // the transliteration Al-Majid, so a slug used more than once gets the number too.

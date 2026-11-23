@@ -12,10 +12,10 @@ plugins {
 // analytics off.
 if (file("google-services.json").exists()) apply(plugin = "com.google.gms.google-services")
 
-// The same upload key as the Flutter app (../android/key.properties), so this
-// build installs as an update over the Play Store version.
+// Upload key for Play Store builds: native/key.properties (not committed). Without
+// it, release builds fall back to the debug key.
 val keystoreProperties = Properties().apply {
-    val file = rootProject.file("../android/key.properties")
+    val file = rootProject.file("key.properties")
     if (file.exists()) file.inputStream().use { load(it) }
 }
 

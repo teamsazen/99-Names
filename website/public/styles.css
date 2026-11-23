@@ -1,7 +1,7 @@
 /* 99 Names website, in the same Sazen layout as urduquran.teamsazen.com: a floating glass
    pill, a hero with a ghost line of Arabic and three phones, a marquee, a live demo, a deep
    card, the features list, a Play Store gallery, FAQ and a giant footer wordmark. It wears
-   the app's own look (lib/src/ui/theme.dart): warm stone and white by day, deep ink at
+   the app's own look (native/…/ui/Theme.kt): warm stone and white by day, deep ink at
    night, the app's ink hero for the deep cards and one bronze-gold accent. Google Sans like
    the app, Harmattan for Arabic and Jameel Noori Nastaleeq for Urdu. */
 @font-face { font-family: "Google Sans"; src: url("/fonts/google-sans.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
