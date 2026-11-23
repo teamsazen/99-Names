@@ -29,6 +29,7 @@ for (const p of people) {
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const SIZE = 64, GAP = 26, PAD = 14, PER_ROW = 10;
+const INSET = 5; // 3 px ring + 2 px space between the ring and the avatar
 const CELL = SIZE + GAP;
 
 const draw = ({ bg, ring }) => {
@@ -41,16 +42,16 @@ const draw = ({ bg, ring }) => {
     const y = PAD + Math.floor(i / PER_ROW) * CELL;
     const cx = x + SIZE / 2, cy = y + SIZE / 2, r = SIZE / 2;
     const label = short(p.contributions);
-    const bw = Math.max(22, 9 + label.length * 7.4), bh = 22;
+    const bw = Math.max(23, 10 + label.length * 6.9), bh = 23;
     const bx = x + SIZE - bw / 2 - 4, by = y - 8;
     return `
   <g>
     <title>${esc(p.login)}: ${p.contributions} commits</title>
-    <clipPath id="c${i}"><circle cx="${cx}" cy="${cy}" r="${r}"/></clipPath>
-    <image href="${p.data}" x="${x}" y="${y}" width="${SIZE}" height="${SIZE}" clip-path="url(#c${i})"/>
+    <clipPath id="c${i}"><circle cx="${cx}" cy="${cy}" r="${r - INSET}"/></clipPath>
+    <image href="${p.data}" x="${x + INSET}" y="${y + INSET}" width="${SIZE - 2 * INSET}" height="${SIZE - 2 * INSET}" clip-path="url(#c${i})"/>
     <circle cx="${cx}" cy="${cy}" r="${r - 1.5}" fill="none" stroke="${ring}" stroke-width="3"/>
     <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="#E5484D" stroke="${bg}" stroke-width="3"/>
-    <text x="${bx + bw / 2}" y="${by + 15.5}" text-anchor="middle" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="700">${label}</text>
+    <text x="${bx + bw / 2}" y="${by + 15.8}" text-anchor="middle" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600">${label}</text>
   </g>`;
   }).join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${items}
