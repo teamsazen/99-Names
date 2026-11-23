@@ -29,7 +29,8 @@ for (const p of people) {
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const SIZE = 64, GAP = 26, PAD = 14, PER_ROW = 10;
-const INSET = 5; // 3 px ring + 2 px space between the ring and the avatar
+const RING = 1.5;
+const INSET = RING + 2; // the ring + 2 px space between the ring and the avatar
 const CELL = SIZE + GAP;
 
 const draw = ({ bg, ring }) => {
@@ -49,7 +50,7 @@ const draw = ({ bg, ring }) => {
     <title>${esc(p.login)}: ${p.contributions} commits</title>
     <clipPath id="c${i}"><circle cx="${cx}" cy="${cy}" r="${r - INSET}"/></clipPath>
     <image href="${p.data}" x="${x + INSET}" y="${y + INSET}" width="${SIZE - 2 * INSET}" height="${SIZE - 2 * INSET}" clip-path="url(#c${i})"/>
-    <circle cx="${cx}" cy="${cy}" r="${r - 1.5}" fill="none" stroke="${ring}" stroke-width="3"/>
+    <circle cx="${cx}" cy="${cy}" r="${r - RING / 2}" fill="none" stroke="${ring}" stroke-width="${RING}"/>
     <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="#E5484D" stroke="${bg}" stroke-width="3"/>
     <text x="${bx + bw / 2}" y="${by + 15.8}" text-anchor="middle" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600">${label}</text>
   </g>`;
