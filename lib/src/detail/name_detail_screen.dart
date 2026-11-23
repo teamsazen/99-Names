@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../analytics/analytics.dart';
 import '../data/names.dart';
 import '../settings/settings_store.dart';
 import '../ui/icons.dart';
@@ -103,7 +104,13 @@ class _NameDetailScreenState extends State<NameDetailScreen> {
                         HeartButton(
                           favourite: s.isFavourite(_name.number),
                           onHero: true,
-                          onChanged: () => s.toggleFavourite(_name.number),
+                          onChanged: () {
+                            Analytics.favourite(
+                              _name.number,
+                              added: !s.isFavourite(_name.number),
+                            );
+                            s.toggleFavourite(_name.number);
+                          },
                         ),
                       ],
                     ),

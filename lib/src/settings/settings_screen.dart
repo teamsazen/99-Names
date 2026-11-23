@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../analytics/analytics.dart';
 import '../ui/app_logo.dart';
 import '../ui/icons.dart';
 import '../ui/theme.dart';
@@ -11,16 +12,39 @@ import 'settings_store.dart';
 const appVersion = '1.0.0';
 const _appActions = MethodChannel('com.muzamil.asmaulhusna/app_actions');
 
+const _site = 'https://99.teamsazen.com';
+
 Future<void> _openAppAction(
   BuildContext context,
   String action, [
   String? packageName,
 ]) async {
+  Analytics.log(
+    switch (action) {
+      'share' => 'share_app',
+      'rate' => 'rate_app',
+      _ => 'open_other_app',
+    },
+    {'package': ?packageName},
+  );
+  await _invoke(
+    context,
+    action,
+    packageName == null ? null : {'packageName': packageName},
+  );
+}
+
+/// Opens a page of the app's website in an in-app browser sheet.
+Future<void> _openPage(BuildContext context, String path) =>
+    _invoke(context, 'openUrl', {'url': '$_site$path'});
+
+Future<void> _invoke(
+  BuildContext context,
+  String action,
+  Map<String, String>? arguments,
+) async {
   try {
-    await _appActions.invokeMethod<void>(
-      action,
-      packageName == null ? null : {'packageName': packageName},
-    );
+    await _appActions.invokeMethod<void>(action, arguments);
   } on PlatformException {
     if (context.mounted) {
       showToast(context, 'Could not open this action. Please try again.');
@@ -91,13 +115,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         _SwitchRow(
                           title: 'English meaning',
-                          subtitle: 'The Most Gracious',
+                          subtitle: 'The Most Merciful',
                           value: s.showEnglish,
                           onChanged: s.setShowEnglish,
                         ),
                         _SwitchRow(
                           title: 'Urdu meaning',
-                          subtitle: 'بے حد مہربان',
+                          subtitle: 'بہت رحم کرنے والا',
                           urduSubtitle: true,
                           value: s.showUrdu,
                           onChanged: s.setShowUrdu,
@@ -112,7 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           height: 84,
                           child: Center(
                             child: Text(
-                              'ٱلرَّحْمَٰنُ',
+                              'الرَّحْمٰنُ',
                               textDirection: TextDirection.rtl,
                               style: TextStyle(
                                 fontFamily: AppFonts.arabic,
@@ -189,7 +213,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                             title: app.name,
-                            subtitle: 'View on Google Play',
+                            subtitle: app.tagline,
                             trailing: AppGlyph.external,
                             onTap: () => _openAppAction(
                               context,
@@ -197,6 +221,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               app.packageName,
                             ),
                           ),
+                      ],
+                    ),
+                    gap,
+                    GroupedSection(
+                      label: 'Legal',
+                      dividerIndent: 60,
+                      children: [
+                        _LinkRow(
+                          leading: _IconTile(AppGlyph.shield, p.accent),
+                          title: 'Privacy Policy',
+                          subtitle: 'What the app keeps and why',
+                          trailing: AppGlyph.external,
+                          onTap: () => _openPage(context, '/privacy/'),
+                        ),
+                        _LinkRow(
+                          leading: _IconTile(AppGlyph.document, p.accent),
+                          title: 'Terms & Conditions',
+                          subtitle: 'Using the app and its content',
+                          trailing: AppGlyph.external,
+                          onTap: () => _openPage(context, '/terms/'),
+                        ),
                       ],
                     ),
                     gap,
@@ -342,9 +387,9 @@ class _BrandCard extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     for (final label in const [
-                      'Offline',
+                      'Works offline',
                       'No account',
-                      'No tracking',
+                      'No ads',
                     ])
                       Container(
                         padding: const EdgeInsets.fromLTRB(10, 6, 12, 6),
@@ -639,25 +684,55 @@ class _SwitchRow extends StatelessWidget {
   }
 }
 
+/// Sazen's live apps on Google Play (developer "Sazen"), newest Islamic apps
+/// first. Icons in assets/other_apps/ are the Play Store icons at 192 px.
 const _otherApps = [
   (
+    name: 'Quran Urdu Audio',
+    tagline: 'Urdu translation, word by word',
+    icon: 'assets/other_apps/quran_urdu_audio.png',
+    packageName: 'com.sazen.urdu.audio.quran.transcribed.shamshad.ali.khan',
+  ),
+  (
     name: 'Rafeeq',
+    tagline: 'Quran & prayer times',
     icon: 'assets/other_apps/rafeeq.png',
     packageName: 'com.satechdev.rafeeqapp',
   ),
   (
-    name: 'FM Crafts',
-    icon: 'assets/other_apps/fm_crafts.png',
-    packageName: 'com.fmcrafts.fmcrafts',
+    name: 'SalahLog',
+    tagline: 'Salah & namaz tracker',
+    icon: 'assets/other_apps/salahlog.png',
+    packageName: 'com.track_prayer',
+  ),
+  (
+    name: 'Quran Khatam Tracker',
+    tagline: 'Daily Quran reading',
+    icon: 'assets/other_apps/quran_khatam_tracker.png',
+    packageName: 'com.quran.khatam.tracker',
+  ),
+  (
+    name: 'Exit Rush',
+    tagline: 'Arrow puzzle game',
+    icon: 'assets/other_apps/exit_rush.png',
+    packageName: 'com.sazen.exit.rush',
+  ),
+  (
+    name: 'Bg Remover',
+    tagline: 'Background remover & 4K photo enhancer',
+    icon: 'assets/other_apps/bg_remover.png',
+    packageName: 'com.sazen.bg.remover',
   ),
   (
     name: 'Budget AI',
+    tagline: 'Expense tracker',
     icon: 'assets/other_apps/budget_ai.png',
     packageName: 'com.budgetai.android',
   ),
   (
-    name: 'Quran Khatam Tracker',
-    icon: 'assets/other_apps/quran_khatam_tracker.png',
-    packageName: 'com.quran.khatam.tracker',
+    name: 'FM Crafts',
+    tagline: 'Crochet gifts',
+    icon: 'assets/other_apps/fm_crafts.png',
+    packageName: 'com.fmcrafts.fmcrafts',
   ),
 ];

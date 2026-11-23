@@ -24,6 +24,8 @@ enum AppGlyph {
   moon,
   auto,
   arrowRight,
+  shield,
+  document,
 }
 
 class AppIcon extends StatelessWidget {
@@ -86,6 +88,32 @@ class _GlyphPainter extends CustomPainter {
         poly(const [Offset(9, 5), Offset(16, 12), Offset(9, 19)]);
       case AppGlyph.chevronRight:
         poly(const [Offset(10, 7), Offset(15, 12), Offset(10, 17)]);
+      case AppGlyph.shield:
+        final shield = Path()
+          ..moveTo(12, 3.5)
+          ..lineTo(19, 6.2)
+          ..lineTo(19, 11.5)
+          ..cubicTo(19, 15.8, 16.1, 19, 12, 20.5)
+          ..cubicTo(7.9, 19, 5, 15.8, 5, 11.5)
+          ..lineTo(5, 6.2)
+          ..close();
+        canvas.drawPath(shield, line);
+        poly(const [Offset(9, 12), Offset(11.2, 14.2), Offset(15.2, 10)]);
+      case AppGlyph.document:
+        poly(const [
+          Offset(14, 3.5),
+          Offset(7, 3.5),
+          Offset(5.5, 5),
+          Offset(5.5, 19),
+          Offset(7, 20.5),
+          Offset(17, 20.5),
+          Offset(18.5, 19),
+          Offset(18.5, 8),
+          Offset(14, 3.5),
+        ], close: true);
+        poly(const [Offset(14, 3.5), Offset(14, 8), Offset(18.5, 8)]);
+        poly(const [Offset(9, 12.5), Offset(15, 12.5)]);
+        poly(const [Offset(9, 16), Offset(13, 16)]);
       case AppGlyph.arrowRight:
         poly(const [Offset(5, 12), Offset(19, 12)]);
         poly(const [Offset(13, 6), Offset(19, 12), Offset(13, 18)]);

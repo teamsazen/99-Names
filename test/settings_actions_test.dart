@@ -35,6 +35,22 @@ void main() {
     await tester.tap(find.text('Rate on Google Play'));
     await tester.pump();
     expect(calls, ['share', 'rate']);
+    final urls = <Object?>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, (
+      call,
+    ) async {
+      if (call.method == 'openUrl') urls.add(call.arguments);
+      return null;
+    });
+    for (final title in ['Privacy Policy', 'Terms & Conditions']) {
+      await tester.scrollUntilVisible(find.text(title), 200);
+      await tester.tap(find.text(title));
+      await tester.pump();
+    }
+    expect(urls, [
+      {'url': 'https://99.teamsazen.com/privacy/'},
+      {'url': 'https://99.teamsazen.com/terms/'},
+    ]);
     expect(tester.takeException(), isNull);
   });
   for (final brightness in Brightness.values) {
@@ -63,10 +79,17 @@ void main() {
         ),
       );
       for (final (name, package) in [
+        (
+          'Quran Urdu Audio',
+          'com.sazen.urdu.audio.quran.transcribed.shamshad.ali.khan',
+        ),
         ('Rafeeq', 'com.satechdev.rafeeqapp'),
-        ('FM Crafts', 'com.fmcrafts.fmcrafts'),
-        ('Budget AI', 'com.budgetai.android'),
+        ('SalahLog', 'com.track_prayer'),
         ('Quran Khatam Tracker', 'com.quran.khatam.tracker'),
+        ('Exit Rush', 'com.sazen.exit.rush'),
+        ('Bg Remover', 'com.sazen.bg.remover'),
+        ('Budget AI', 'com.budgetai.android'),
+        ('FM Crafts', 'com.fmcrafts.fmcrafts'),
       ]) {
         await tester.scrollUntilVisible(find.text(name), 200);
         await tester.tap(find.text(name));

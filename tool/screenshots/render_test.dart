@@ -74,7 +74,14 @@ void main() {
       'dark',
       'settings',
     ];
-    for (final name in scenarios) {
+    // Light captures for the store and the website, then dark ones of the
+    // main screens so the website can follow the visitor's theme.
+    final runs = [
+      for (final name in scenarios) (name, name == 'dark', 'store/screenshots'),
+      for (final name in ['home', 'rahman', 'grid', 'settings'])
+        (name, true, 'store/screenshots/dark'),
+    ];
+    for (final (name, dark, folder) in runs) {
       tester.view.physicalSize = const Size(390, 844);
       // This standalone renderer runs with flutter test.
       // ignore: invalid_use_of_visible_for_testing_member
@@ -83,7 +90,6 @@ void main() {
         'favourites': ['1', '3', '14', '99'],
       });
       await SettingsStore.instance.load();
-      final dark = name == 'dark';
       final screen = switch (name) {
         'rahman' => NameDetailScreen(names: names, initialIndex: 0),
         'sabur' => NameDetailScreen(names: names, initialIndex: 98),
@@ -109,17 +115,34 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      // The list, search and filters sit below the ink hero: bring "All
+      // names" up under the bar.
+      if (const ['favourites', 'search', 'grid', 'dark'].contains(name)) {
+        final title = find.text('All names');
+        await tester.scrollUntilVisible(
+          title,
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
+        Scrollable.ensureVisible(tester.element(title), alignment: .1);
+        await tester.pumpAndSettle();
+      }
       if (name == 'favourites') {
         await tester.tap(find.text('Favourites  4'));
         await tester.pumpAndSettle();
       }
       if (name == 'search') {
-        await tester.enterText(find.byType(TextField), 'Merciful');
+        await tester.enterText(find.byType(TextField), 'Most');
         FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pumpAndSettle();
+        Scrollable.ensureVisible(
+          tester.element(find.text('All names')),
+          alignment: .1,
+        );
         await tester.pumpAndSettle();
       }
       expect(tester.takeException(), isNull, reason: name);
-      await capture(tester, key, 'store/screenshots/$name.png', scale: 3);
+      await capture(tester, key, '$folder/$name.png', scale: 3);
     }
 
     const titles = [

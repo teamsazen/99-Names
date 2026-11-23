@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../analytics/analytics.dart';
 import '../data/names.dart';
 import '../detail/name_detail_screen.dart';
 import '../settings/settings_screen.dart';
@@ -51,8 +52,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _open(List<DivineName> list, int index, String heroPrefix) {
     FocusScope.of(context).unfocus();
+    Analytics.openName(list[index].number, heroPrefix);
     Navigator.of(context).push(
       CupertinoPageRoute(
+        settings: const RouteSettings(name: 'name'),
         builder: (_) => NameDetailScreen(
           names: list,
           initialIndex: index,
@@ -62,9 +65,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openSettings() => Navigator.of(
-    context,
-  ).push(CupertinoPageRoute(builder: (_) => const SettingsScreen()));
+  void _openSettings() => Navigator.of(context).push(
+    CupertinoPageRoute(
+      settings: const RouteSettings(name: 'settings'),
+      builder: (_) => const SettingsScreen(),
+    ),
+  );
 
   /// The glass bar takes over once the ink hero has scrolled away.
   bool _onScroll(ScrollNotification n) {
