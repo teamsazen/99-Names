@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESC}}">
 <link rel="canonical" href="{{URL}}">
@@ -11,8 +12,8 @@
 <link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#FAF8F3" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F3EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0E12" media="(prefers-color-scheme: dark)">
 <meta name="google-play-app" content="app-id=com.muzamil.asmaulhusna">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="99 Names - Asmaul Husna">
@@ -21,7 +22,7 @@
 <meta property="og:url" content="{{URL}}">
 <meta property="og:image" content="https://99.teamsazen.com/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preload" href="/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/google-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css?v={{CSSV}}">
 {{LD}}
 <script>document.documentElement.classList.add('js')</script>
@@ -35,13 +36,13 @@
   <section class="name-hero">
     <div class="wrap">
       <a class="back" href="/#names">← All 99 Names</a>
-      <div class="name-head">
+      <div class="name-card">
         <div>
           <p class="eyebrow">Name {{N}} of the 99 Names of Allah</p>
           <h1>{{TR}}</h1>
           <p class="name-en">{{EN}}</p>
         </div>
-        <p class="name-ar" lang="ar" dir="rtl">{{AR}}</p>
+        <div class="name-art"><p class="name-ar" lang="ar" dir="rtl">{{AR}}</p></div>
       </div>
     </div>
   </section>
@@ -56,7 +57,7 @@
         <div><dt>Arabic</dt><dd class="name-ar-sm" lang="ar" dir="rtl">{{AR}}</dd></div>
         <div><dt>Transliteration</dt><dd>{{TR}}</dd></div>
         <div><dt>English meaning</dt><dd>{{EN}}</dd></div>
-        <div><dt>Urdu meaning</dt><dd class="urdu name-ur" lang="ur" dir="rtl">{{UR}}</dd></div>
+        <div><dt>Urdu meaning</dt><dd class="name-ur" lang="ur" dir="rtl">{{UR}}</dd></div>
         <div><dt>Number</dt><dd>{{N}} of 99, in the order narrated by at-Tirmidhi</dd></div>
       </dl>
     </div>
@@ -69,9 +70,9 @@
 
   <section class="final">
     <div class="wrap">
-      <img class="icon" src="/img/logo.png" alt="" width="88" height="88">
+      <img class="final-logo" src="/img/logo.png" alt="" width="128" height="128" loading="lazy">
       <h2>Keep the Names<br>with you.</h2>
-      <p class="lead">Every Name in Arabic calligraphy, with transliteration, English and Urdu meanings and a short reflection. Calm, simple and fully offline.</p>
+      <p class="lead">Every Name in Arabic calligraphy, with transliteration, English and Urdu meanings and a short reflection. A new Name every day. Free, with no ads.</p>
       <a class="gp" href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna" rel="noopener" aria-label="Get it on Google Play"><svg aria-hidden="true"><use href="#gp-logo"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
     </div>
   </section>
