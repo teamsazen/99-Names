@@ -1,4 +1,5 @@
 import Flutter
+import SafariServices
 import UIKit
 
 @main
@@ -49,6 +50,27 @@ import UIKit
         UIApplication.shared.open(url) { opened in
           result(opened ? nil : FlutterError(code: "unavailable", message: "Cannot open Google Play", details: nil))
         }
+      case "openUrl":
+        // Only the app's own website (privacy policy, terms), in a Safari sheet.
+        guard let arguments = call.arguments as? [String: Any],
+              let link = arguments["url"] as? String,
+              let pageURL = URL(string: link), pageURL.scheme == "https", pageURL.host == "99.teamsazen.com" else {
+          result(FlutterError(code: "invalid_argument", message: "Unsupported link", details: nil))
+          return
+        }
+        let scene = UIApplication.shared.connectedScenes
+          .compactMap { $0 as? UIWindowScene }
+          .first { $0.activationState == .foregroundActive }
+        guard var presenter = scene?.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
+          result(FlutterError(code: "unavailable", message: "Cannot open the page", details: nil))
+          return
+        }
+        while let presented = presenter.presentedViewController { presenter = presented }
+        let safari = SFSafariViewController(url: pageURL)
+        safari.preferredControlTintColor = UIColor(red: 0.851, green: 0.737, blue: 0.537, alpha: 1)
+        safari.preferredBarTintColor = UIColor(red: 0.063, green: 0.094, blue: 0.125, alpha: 1)
+        presenter.present(safari, animated: true)
+        result(nil)
       default: result(FlutterMethodNotImplemented)
       }
     }

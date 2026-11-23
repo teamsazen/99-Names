@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'src/analytics/analytics.dart';
 import 'src/home/home_screen.dart';
 import 'src/settings/settings_store.dart';
 import 'src/ui/motion.dart';
@@ -16,6 +17,7 @@ Future<void> main() async {
   _registerFontLicenses();
   runApp(const AsmaulHusnaApp());
   unawaited(checkForAppUpdate());
+  unawaited(Analytics.init());
 }
 
 /// The Open Font License travels with Google Sans; Flutter's
@@ -57,6 +59,7 @@ class AsmaulHusnaApp extends StatelessWidget {
           ),
         );
       },
+      navigatorObservers: [Analytics.observer],
       home: const HomeScreen(),
     ),
   );

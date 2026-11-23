@@ -2,9 +2,14 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services") apply false
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
+
+// Firebase config is not in the public repo; without it the app builds with
+// analytics off.
+if (file("google-services.json").exists()) apply(plugin = "com.google.gms.google-services")
 
 // Upload key for Play Store builds; see android/key.properties (not committed).
 val keystoreProperties = Properties().apply {
@@ -30,6 +35,8 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Analytics stays off in debug and profile builds.
+        manifestPlaceholders["analyticsEnabled"] = "false"
     }
 
     signingConfigs {
@@ -49,6 +56,7 @@ android {
             // `flutter run --release` still works on other machines.
             signingConfig = signingConfigs.findByName("release")
                 ?: signingConfigs.getByName("debug")
+            manifestPlaceholders["analyticsEnabled"] = "true"
             isMinifyEnabled = true
             isShrinkResources = true
         }

@@ -3,6 +3,7 @@ package com.muzamil.asmaulhusna
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -31,6 +32,24 @@ class MainActivity : FlutterActivity() {
                             } catch (_: ActivityNotFoundException) {
                                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(storeUrl)))
                             }
+                        }
+                        "openUrl" -> {
+                            // Only the app's own website (privacy policy, terms).
+                            val link = call.argument<String>("url")
+                            val uri = link?.let { Uri.parse(it) }
+                            if (uri == null || uri.scheme != "https" || uri.host != "99.teamsazen.com") {
+                                result.error("invalid_argument", "Unsupported link", null)
+                                return@setMethodCallHandler
+                            }
+                            // A Chrome Custom Tab in the app's ink colour, through the
+                            // standard Custom Tabs extras (no extra library); browsers
+                            // without Custom Tabs simply open the page.
+                            val tab = Intent(Intent.ACTION_VIEW, uri).apply {
+                                putExtras(Bundle().apply { putBinder("android.support.customtabs.extra.SESSION", null) })
+                                putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", 0xFF101820.toInt())
+                                putExtra("androidx.browser.customtabs.extra.SHARE_STATE", 2)
+                            }
+                            startActivity(tab)
                         }
                         else -> { result.notImplemented(); return@setMethodCallHandler }
                     }
