@@ -148,4 +148,6 @@ Contributions are welcome! Open an issue or send a pull request.
 
 ## Contributors
 
-<a href="https://github.com/teamsazen"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/readme/contributor-dark.png"><img src=".github/readme/contributor-light.png" alt="teamsazen" title="teamsazen" width="64" height="64"></picture></a>
+<a href="https://github.com/teamsazen/99-Names/graphs/contributors"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/readme/contributors-dark.svg"><img src=".github/readme/contributors-light.svg" alt="Contributors, with their number of commits"></picture></a>
+
+The picture updates itself after every push (`.github/workflows/contributors.yml`).
