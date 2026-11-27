@@ -27,7 +27,7 @@ Please do **not** send:
 - New libraries or SDKs, ads, trackers or anything that needs an account
 - Changes to the name, logo, icon or branding (see [BRANDING.md](BRANDING.md))
 
-Not sure? [Open an issue](https://github.com/teamsazen/99-Names/issues) first
+Not sure? [Open an issue](https://github.com/teamsazen/99-names/issues) first
 and ask. That saves your time and ours.
 
 ## Rules for a pull request
@@ -62,7 +62,7 @@ form asks for them:
 
 ## Reporting a problem
 
-Open an [issue](https://github.com/teamsazen/99-Names/issues) with what
+Open an [issue](https://github.com/teamsazen/99-names/issues) with what
 happened, what you expected, the steps to make it happen again, your phone and
 Android version, and a screenshot if you can.
 

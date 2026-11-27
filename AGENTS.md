@@ -22,5 +22,5 @@
 ## Rules
 - New font → also credit it in Settings (`fontCredits` in `SettingsScreen.kt`) and README.
 - Before committing: `cd native && ./gradlew testDebugUnitTest :app:assembleDebug`; for website changes `cd website && node build.mjs`.
-- Small conventional commits (`feat:`, `style:`, `build:`…); push to `teamsazen/99-Names` (`main`).
+- Small conventional commits (`feat:`, `style:`, `build:`…); push to `teamsazen/99-names` (`main`).
 - Commit message = one professional title line only: no body, no description, no `Co-Authored-By` or any other trailer (no Claude, Codex or other tool names). The title alone says what changed.
