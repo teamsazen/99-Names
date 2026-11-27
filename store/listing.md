@@ -1,6 +1,6 @@
-# Play Store listing: 99 Names – Asmaul Husna 2.0.0
+# Play Store listing: 99 Names – Asmaul Husna 2.0.1
 
-Package `com.muzamil.asmaulhusna` · versionCode 3 · versionName 2.0.0 (the native Kotlin app
+Package `com.muzamil.asmaulhusna` · versionCode 4 · versionName 2.0.1 (the native Kotlin app
 in `native/`, signed with the same upload key as 1.0.0).
 
 ## Privacy policy URL
@@ -69,6 +69,15 @@ Whether you are memorising the 99 Names, teaching them to your children or simpl
 ```
 
 ## Release notes, en-US (max 500)
+
+2.0.1:
+
+```
+• The Arabic text size slider is smooth now: touch it and slide in one go
+• Settings: a link to our website, with all our apps and games
+```
+
+2.0.0:
 
 ```
 A brand-new 99 Names, rebuilt from the ground up:

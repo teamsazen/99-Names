@@ -14,7 +14,7 @@ The Arabic and the order come from Jami at-Tirmidhi 3507; the English and Urdu
 meanings come from its published translations, not machine translation.
 
 - A native Android app: Kotlin + Jetpack Compose, in [`native/`](native)
-- Package: `com.muzamil.asmaulhusna` · version 2.0.0 · Android 7.0+ (minSdk 24)
+- Package: `com.muzamil.asmaulhusna` · version 2.0.1 · Android 7.0+ (minSdk 24)
 - Themes: System, Light, Dark (ink blue, ivory + bronze)
 - Website: [99.teamsazen.com](https://99.teamsazen.com), in [`website/`](website)
 

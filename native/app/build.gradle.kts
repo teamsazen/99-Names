@@ -30,8 +30,8 @@ android {
         minSdk = 24
         targetSdk = 36
         // Above the Flutter app's 1.0.0+2, so it updates in place.
-        versionCode = 3
-        versionName = "2.0.0"
+        versionCode = 4
+        versionName = "2.0.1"
         // Analytics stays off in debug builds.
         manifestPlaceholders["analyticsEnabled"] = "false"
     }

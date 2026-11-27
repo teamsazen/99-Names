@@ -73,7 +73,7 @@ import com.muzamil.asmaulhusna.ui.rowButton
 import com.muzamil.asmaulhusna.ui.style
 import com.muzamil.asmaulhusna.ui.urduStyle
 
-const val APP_VERSION = "2.0.0"
+const val APP_VERSION = "2.0.1"
 
 private data class OtherApp(val name: String, val tagline: String, val icon: Int, val packageName: String)
 
