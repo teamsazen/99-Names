@@ -1,6 +1,5 @@
 /* 99 Names website, in the same minimal Sazen layout as urduquran.teamsazen.com: a floating
-   glass pill, a hero with three phones in a real frame, a marquee, the live Name of the day,
-   a deep card, the features list, the 99 Names and a slim footer. It wears
+   glass pill, a hero with three phones in a real frame, a marquee, a deep card, the features list, the 99 Names and a slim footer. It wears
    the app's own look (native/…/ui/Theme.kt): warm stone and white by day, deep ink at
    night, the app's ink hero for the deep cards and one bronze-gold accent. Google Sans like
    the app, Harmattan for Arabic and Jameel Noori Nastaleeq for Urdu. */
@@ -38,8 +37,16 @@
   --r-card: clamp(28px, 3.2vw, 44px);
   color-scheme: light;
 }
+:root[data-theme="dark"] {
+    --bg: #0A0E12; --surface: #151B21; --sunken: #1A2128; --ink: #F4F1EA; --body: #C9C4BA; --muted: #9A958B;
+    --faint: rgba(244, 241, 234, .3); --line: #262F37; --accent: #D9BC89; --accent-edge: #EAD3A6; --accent-soft: #2A241A;
+    --deep: #121C25; --deep-hi: #1E2E3C; --on-ink: #14100A; --card-line: #222B33;
+    --glass: rgba(10, 14, 18, .58); --glass-line: rgba(244, 241, 234, .1); --shadow: rgba(0, 0, 0, .6);
+    color-scheme: dark;
+}
+/* Without JS the system decides. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme]) {
     --bg: #0A0E12; --surface: #151B21; --sunken: #1A2128; --ink: #F4F1EA; --body: #C9C4BA; --muted: #9A958B;
     --faint: rgba(244, 241, 234, .3); --line: #262F37; --accent: #D9BC89; --accent-edge: #EAD3A6; --accent-soft: #2A241A;
     --deep: #121C25; --deep-hi: #1E2E3C; --on-ink: #14100A; --card-line: #222B33;
@@ -47,6 +54,9 @@
     color-scheme: dark;
   }
 }
+/* Phones: the light capture in a light theme, the dark one in a dark theme. */
+:root[data-theme="dark"] .th-light, :root:not([data-theme="dark"]) .th-dark { display: none !important; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) .th-light { display: none !important; } :root:not([data-theme]) .th-dark { display: block !important; } }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -101,10 +111,37 @@ a:hover { color: var(--accent-edge); }
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 700; font-size: 17px; letter-spacing: -.02em; text-decoration: none; white-space: nowrap; }
 .brand:hover { color: var(--ink); }
 .brand img { width: 34px; height: 34px; border-radius: 9px; }
+.brand-text { display: grid; line-height: 1.12; }
+.brand-text small { font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+
+/* Theme button: a round glass button in the corner, as tall as the header pill. The sun
+   turns away and the moon turns in (and back). */
+.theme-btn {
+  pointer-events: auto; position: absolute; top: calc(14px + env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right));
+  width: 50px; height: 50px; flex: none; padding: 0; border-radius: 50%; cursor: pointer; display: grid; place-items: center;
+  background: var(--glass); border: 1px solid var(--glass-line); color: var(--ink);
+  backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 10px 40px -18px rgba(0, 0, 0, .35); transition: box-shadow .25s ease;
+}
+.theme-btn:hover { box-shadow: 0 10px 40px -18px rgba(0, 0, 0, .35), 0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent); }
+.theme-btn svg { grid-area: 1 / 1; width: 22px; height: 22px; transition: transform .32s var(--ease), opacity .25s ease; }
+.tb-sun { fill: #E0A526; stroke: #E0A526; stroke-width: 2; stroke-linecap: round; }
+.tb-moon { fill: currentColor; opacity: 0; transform: rotate(-90deg) scale(.5); }
+.theme-btn[aria-pressed="true"] .tb-sun { opacity: 0; transform: rotate(90deg) scale(.5); }
+.theme-btn[aria-pressed="true"] .tb-moon { opacity: 1; transform: none; }
+html:not(.js) .theme-btn { display: none; }
+
 .nav { display: flex; gap: clamp(14px, 1.8vw, 24px); }
 .nav a { color: var(--muted); font-weight: 600; font-size: 14px; text-decoration: none; transition: color .2s ease; white-space: nowrap; }
 .nav a:hover, .nav a[aria-current] { color: var(--ink); }
-@media (max-width: 920px) { .nav { display: none; } .navpill { width: 100%; } .navpill .gp-nav { margin-left: auto; } }
+@media (max-width: 920px) {
+  .nav { display: none; }
+  /* The pill fills the row, with the round theme button beside it. */
+  .pill-wrap { gap: 10px; }
+  .navpill { width: auto; flex: 1; }
+  .navpill .gp-nav { margin-left: auto; }
+  .theme-btn { position: static; }
+}
 @media (max-width: 420px) { .brand { font-size: 15px; } .gp-nav { padding: 0 14px 0 12px; } .gp-nav b { font-size: 14px; } }
 
 /* ---------- Type ---------- */
@@ -128,7 +165,7 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .hero { position: relative; padding-block: calc(110px + env(safe-area-inset-top)) clamp(32px, 4vw, 56px); overflow: hidden; }
 .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(28px, 4vw, 72px); align-items: center; }
 .hero-logo { width: clamp(76px, 8vw, 104px); height: auto; border-radius: 24%; margin: 0 0 18px; box-shadow: 0 18px 40px -20px var(--shadow); }
-.tag { display: inline-block; margin: 0 0 22px; padding: 7px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 700; }
+.tag { margin: 0 0 18px; color: var(--accent); font-size: 15px; font-weight: 700; letter-spacing: .01em; }
 .hero h1 { font-size: clamp(44px, 5.4vw, 88px); }
 .hl { color: var(--accent); }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -136,7 +173,11 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .ticks li { display: inline-flex; align-items: center; gap: 8px; }
 .ticks li::before { content: ""; width: 7px; height: 12px; border: solid var(--accent); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) translateY(-2px); }
 .hero-phones { position: relative; height: clamp(520px, 52vw, 700px); }
-.hero-phones .phone { position: absolute; }
+.hero-phones .phone { position: absolute; transition: left .8s var(--ease), top .8s var(--ease), width .8s var(--ease), transform .8s var(--ease); }
+/* Three phones that trade places: tap one at the back and it comes to the front. */
+.hero-phones .phone:not(.ph-main) { cursor: pointer; }
+.hero-phones .phone:focus-visible { outline: none; }
+.hero-phones .phone:focus-visible img { outline: 3px solid var(--accent); outline-offset: 6px; border-radius: 40px; }
 .ph-main { width: clamp(220px, 23vw, 320px); left: 50%; top: 0; transform: translateX(-50%); z-index: 3; }
 .ph-left, .ph-right { width: clamp(180px, 18vw, 260px); top: 14%; z-index: 2; }
 .ph-left { left: 50%; transform: translateX(-112%) rotate(-7deg); }
@@ -166,34 +207,6 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .facts-list li { padding: 14px 0; border-top: 1px solid var(--line); color: var(--muted); }
 .facts-list li:last-child { border-bottom: 1px solid var(--line); }
 .facts-list b { color: var(--ink); }
-
-/* ---------- Name of the day: a live card, like the app's hero ---------- */
-.today {
-  position: relative; overflow: hidden; margin-top: 30px; max-width: 560px; border-radius: 32px; padding: 22px 24px 24px;
-  background: var(--deep); color: var(--deep-ink); border: 1px solid var(--card-line); box-shadow: 0 30px 60px -34px var(--shadow);
-}
-.today-top { position: relative; display: flex; align-items: center; gap: 12px; }
-.today-top .eyebrow { margin: 0; color: var(--deep-gold); letter-spacing: .14em; font-size: 12px; text-transform: uppercase; }
-.today-top hr { flex: 1; border: 0; border-top: 1px solid rgba(247, 243, 234, .14); margin: 0; }
-.ring { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid currentColor; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.today .ring { color: var(--deep-gold); border-color: rgba(217, 188, 137, .5); }
-.today-art { position: relative; display: grid; place-items: center; height: 200px; background: radial-gradient(closest-side, rgba(217, 188, 137, .18), rgba(217, 188, 137, 0)); }
-.today-ar { position: relative; margin: 0; font-family: var(--arabic); font-size: 52px; line-height: 1.8; color: var(--deep-gold); white-space: nowrap; }
-.today-text { position: relative; text-align: center; }
-.today-tr { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
-.today-en { margin: 2px 0 0; color: var(--deep-muted); font-weight: 500; }
-.today-ur { margin: 0; color: var(--deep-ink); font-size: 24px; line-height: 2.1; }
-.today-rf { margin: 10px auto 0; max-width: 34em; color: rgba(247, 243, 234, .8); font-size: 15.5px; }
-.today-bar { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 18px; }
-.today-bar a { color: var(--deep-gold); font-weight: 700; text-decoration: none; }
-.today-bar a:hover { color: #fff; }
-.today-nav { display: flex; gap: 8px; }
-.round { width: 44px; height: 44px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; color: var(--deep-ink); background: rgba(247, 243, 234, .1); transition: transform .45s var(--ease), background-color .2s ease; }
-.round:hover { background: rgba(247, 243, 234, .18); }
-.round:active { transform: scale(.92); }
-.round svg { width: 20px; height: 20px; }
-.today-swap { transition: opacity .28s var(--ease), transform .45s var(--ease); }
-.today.out .today-swap { opacity: 0; transform: translateY(10px); }
 
 /* ---------- Deep card ---------- */
 .deep-card {
@@ -339,6 +352,8 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 @view-transition { navigation: auto; }
 ::view-transition-old(root) { animation: none; }
 ::view-transition-new(root) { animation: curtain .9s cubic-bezier(.7, 0, .2, 1) both; }
+/* A theme change sweeps across the page from the switch's side (site.js animates it). */
+.theme-vt::view-transition-new(root), .theme-vt::view-transition-old(root) { animation: none !important; mix-blend-mode: normal; }
 @keyframes curtain { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -352,8 +367,8 @@ html.lenis, html.lenis body { height: auto; }
 .hero-logo { animation: pop 1s var(--ease) both !important; }
 @keyframes pop { from { opacity: 0; transform: scale(.86) rotate(-6deg); } }
 .hero-phones { animation: rise 1.4s .15s var(--ease) both; }
-.hero-phones .ph-left { animation: fan-l 1.5s .35s var(--ease) both; }
-.hero-phones .ph-right { animation: fan-r 1.5s .35s var(--ease) both; }
+.hero-phones:not(.settled) .ph-left { animation: fan-l 1.5s .35s var(--ease) both; }
+.hero-phones:not(.settled) .ph-right { animation: fan-r 1.5s .35s var(--ease) both; }
 @keyframes fan-l { from { transform: translateX(-50%) rotate(0); opacity: 0; } }
 @keyframes fan-r { from { transform: translateX(-50%) rotate(0); opacity: 0; } }
 @keyframes up { from { opacity: 0; translate: 0 26px; } to { opacity: 1; translate: 0 0; } }
@@ -379,7 +394,6 @@ html.lenis, html.lenis body { height: auto; }
   .pair .ph-main { width: min(52vw, 300px); order: 2; margin-left: -12vw; margin-top: 50px; }
   .pair .ph-side { width: min(44vw, 250px); order: 1; }
   .search-s .pair { order: 2; }
-  .today { max-width: none; }
   .adv-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .adv-list article:not(:nth-child(3n + 1)) { padding-left: 0; border-left: 0; }
   .adv-list article:nth-child(2n) { padding-left: 18px; border-left: 1px solid var(--line); }
@@ -390,12 +404,11 @@ html.lenis, html.lenis body { height: auto; }
   .adv-list { grid-template-columns: 1fr; }
   .adv-list article:nth-child(2n) { padding-left: 0; border-left: 0; }
   .cta-row .gp { width: 100%; justify-content: center; }
-  .today { padding: 18px 18px 20px; border-radius: 26px; }
-  .today-ar { font-size: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  /* The marquee and the theme switch keep moving: they are part of the page's character. */
+  *:not(.marquee-track):not(.tb-sun):not(.tb-moon), *::before, *::after { animation: none !important; transition: none !important; }
   .lines > .ln > span { transform: none; }
   .reveal { opacity: 1; transform: none; }
 }

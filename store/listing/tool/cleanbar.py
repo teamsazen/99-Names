@@ -4,7 +4,8 @@ The photo frames round off the screen's top corners, so the bar sits lower and f
 than a real one, and the app is moved EXTRA px down under a taller band of its own top
 colour so it keeps its breathing room. The app itself is not changed: the rows that fall
 off the bottom are behind the gesture handle, which is put back where it was.
-usage: cleanbar.py device/x.png ready/x.png   (1080x2400 capture; never run it on its own output)"""
+With --bare there is no status bar and no gesture handle: just the band (for the website).
+usage: cleanbar.py [--bare] device/x.png ready/x.png   (1080x2400 capture; never run it on its own output)"""
 import sys
 from pathlib import Path
 import numpy as np
@@ -70,7 +71,9 @@ def handle_mask(h, w):
 
 
 def main():
-    src, out = sys.argv[1], sys.argv[2]
+    args = [a for a in sys.argv[1:] if a != "--bare"]
+    bare = "--bare" in sys.argv
+    src, out = args[0], args[1]
     orig = np.asarray(Image.open(src).convert("RGB"))
     h, w = orig.shape[:2]
     top = BAR + EXTRA
@@ -78,8 +81,12 @@ def main():
     a[top:] = orig[BAR: h - EXTRA]  # the app, moved down
     a[:top] = orig[BAR + 2]  # a band of the app's own top colour
     # put the gesture handle back at the bottom, over the moved app
+    a = a.astype(np.float32)
+    if bare:  # the handle fell off the bottom with the move; no bar either
+        Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).save(out)
+        return
     hm = handle_mask(h, w)
-    a = (a * (1 - hm) + orig * hm).astype(np.float32)
+    a = a * (1 - hm) + orig * hm
 
     bg = orig[BAR + 2].mean(0)
     light_bg = (0.299 * bg[0] + 0.587 * bg[1] + 0.114 * bg[2]) > 140

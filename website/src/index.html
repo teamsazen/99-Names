@@ -12,8 +12,7 @@
 <link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="theme-color" content="#F6F3EC" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0A0E12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F6F3EC">
 <meta name="google-play-app" content="app-id=com.muzamil.asmaulhusna">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="99 Names - Asmaul Husna">
@@ -27,7 +26,18 @@
 <link rel="preload" href="/fonts/google-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css?v=1">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"MobileApplication","name":"99 Names - Asmaul Husna","alternateName":["Asmaul Husna","الأسماء الحسنى"],"operatingSystem":"Android","applicationCategory":"EducationalApplication","inLanguage":["en","ur","ar"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna","publisher":{"@type":"Organization","name":"Sazen","url":"https://teamsazen.com"}}</script>
-<script>document.documentElement.classList.add('js')</script>
+<!-- Theme before first paint: the visitor's choice if they made one, else the system's. -->
+<script>
+(() => {
+  const d = document.documentElement;
+  let t = null;
+  try { t = localStorage.getItem('theme'); } catch (e) {}
+  if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  d.dataset.theme = t;
+  d.classList.add('js');
+  document.querySelector('meta[name="theme-color"]').content = t === 'dark' ? '#0A0E12' : '#F6F3EC';
+})();
+</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -36,14 +46,17 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="pill-wrap">
   <nav class="navpill" aria-label="Main">
-    <a class="brand" href="/"><img src="/img/logo.png" alt="" width="34" height="34">99 Names</a>
+    <a class="brand" href="/"><img src="/img/logo.png" alt="" width="34" height="34"><span class="brand-text">99 Names<small>Asmaul Husna</small></span></a>
     <div class="nav">
-      <a href="#today">Name of the day</a>
       <a href="#names">The 99 Names</a>
       <a href="#features">Features</a>
     </div>
     <a class="gp gp-nav" href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna" rel="noopener" aria-label="Get it on Google Play"><svg aria-hidden="true"><use href="#gp-logo"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
   </nav>
+  <button type="button" class="theme-btn" data-theme-toggle aria-pressed="false" aria-label="Dark theme" title="Light or dark">
+    <svg class="tb-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><g><line x1="12" y1="2.2" x2="12" y2="4.4"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(45 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(90 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(135 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(180 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(225 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(270 12 12)"/><line x1="12" y1="2.2" x2="12" y2="4.4" transform="rotate(315 12 12)"/></g></svg>
+    <svg class="tb-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8.2 8.2 0 0 1 9.4 4a8.2 8.2 0 1 0 10.6 10.6z"/></svg>
+  </button>
 </header>
 
 <main id="main">
@@ -67,43 +80,6 @@
       <div class="marquee-track">
         <span>Arabic calligraphy</span><span>Transliteration</span><span>English meanings</span><span lang="ur">اردو</span><span>Reflections</span><span>Name of the day</span><span>Favourites</span><span>No ads</span>
         <span>Arabic calligraphy</span><span>Transliteration</span><span>English meanings</span><span lang="ur">اردو</span><span>Reflections</span><span>Name of the day</span><span>Favourites</span><span>No ads</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="today-s" id="today">
-    <div class="wrap row-grid">
-      <div class="row-copy">
-        <p class="eyebrow">Name of the day</p>
-        <h2>One Name,<br>every day.</h2>
-        <p class="sub">The app opens on the same Name for everyone each day, and goes through all 99 in turn. Here is today’s. Use the arrows to meet a few more.</p>
-        <div class="today" data-today aria-live="polite">
-          <div class="today-top">
-            <p class="eyebrow" data-label>Name of the day</p>
-            <hr>
-            <span class="ring" data-n>1</span>
-          </div>
-          <div class="today-swap">
-            <div class="today-art"><p class="today-ar" lang="ar" dir="rtl" data-ar>الرَّحْمٰنُ</p></div>
-            <div class="today-text">
-              <p class="today-tr" data-tr>Ar-Rahman</p>
-              <p class="today-en" data-en>The Most Merciful</p>
-              <p class="today-ur" lang="ur" dir="rtl" data-ur>بہت رحم کرنے والا</p>
-              <p class="today-rf" data-rf></p>
-            </div>
-          </div>
-          <div class="today-bar">
-            <a href="/names/ar-rahman" data-link>Read about Ar-Rahman →</a>
-            <div class="today-nav">
-              <button type="button" class="round" data-step="-1" aria-label="Previous Name"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-              <button type="button" class="round" data-step="1" aria-label="Next Name"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="pair" data-drift>
-        {{PHONE home ph-main "The home screen with the Name of the day"}}
-        {{PHONE rahman ph-side "The page for a Name, with its meanings and a reflection"}}
       </div>
     </div>
   </section>
@@ -205,7 +181,6 @@
   </div>
 </footer>
 
-<script type="application/json" id="names-data">{{NAMES_JSON}}</script>
 <script src="/js/lenis.min.js" defer></script>
 <script src="/site.js?v=1" defer></script>
 </body>

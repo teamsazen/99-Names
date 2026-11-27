@@ -1,7 +1,6 @@
 // Page motion, as on urduquran.teamsazen.com: smooth scroll, headlines revealing line by
-// line, sections fading in, phones drifting with the scroll. Plus the live "Name of the day" card (the same
-// Name the app shows today), the 99 Names search and the
-// privacy page's contents highlight. Without JS (or with Reduce Motion) everything is
+// line, sections fading in, phones drifting with the scroll. Plus the theme switch, the
+// hero phones trading places, the 99 Names search and the privacy page's contents highlight. Without JS (or with Reduce Motion) everything is
 // simply visible.
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,44 +25,60 @@
     els.forEach((el) => io.observe(el));
   };
 
-  // Name of the day: the same Name the app opens on today, with arrows to try others.
-  const today = document.querySelector('[data-today]');
-  const data = document.getElementById('names-data');
-  if (today && data) {
-    const names = JSON.parse(data.textContent);
-    const d = new Date();
-    let i = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) % 99;
-    const first = i;
-    const $ = (sel) => today.querySelector(sel);
-    const paint = () => {
-      const n = names[i];
-      $('[data-n]').textContent = n.n;
-      $('[data-ar]').textContent = n.ar;
-      $('[data-tr]').textContent = n.tr;
-      $('[data-en]').textContent = n.en;
-      $('[data-ur]').textContent = n.ur;
-      $('[data-rf]').textContent = n.rf;
-      const link = $('[data-link]');
-      link.href = n.path;
-      link.textContent = `Read about ${n.tr} →`;
-      $('[data-label]').textContent = i === first ? 'Name of the day' : `Name ${n.n} of 99`;
-    };
-    let busy = false;
-    const go = (step) => {
-      if (busy) return;
-      i = (i + step + 99) % 99;
-      if (reduce) { paint(); return; }
-      busy = true;
-      today.classList.add('out');
-      setTimeout(() => {
-        paint();
-        today.classList.remove('out');
-        busy = false;
-      }, 260);
-    };
-    today.querySelectorAll('[data-step]').forEach((b) => b.addEventListener('click', () => go(Number(b.dataset.step))));
-    paint();
-  }
+  // Theme: the system decides until the visitor flips the switch; their choice is remembered.
+  const root = document.documentElement;
+  const toggle = document.querySelector('[data-theme-toggle]');
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  const stored = () => { try { return localStorage.getItem('theme'); } catch (e) { return null; } };
+  const apply = (t) => {
+    root.dataset.theme = t;
+    if (themeMeta) themeMeta.content = t === 'dark' ? '#0A0E12' : '#F6F3EC';
+    toggle?.setAttribute('aria-pressed', String(t === 'dark'));
+  };
+  apply(root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => { if (!stored()) apply(e.matches ? 'dark' : 'light'); });
+  toggle?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    // The icon turns first, then the new theme sweeps across the page from the button's side.
+    toggle.setAttribute('aria-pressed', String(next === 'dark'));
+    if (!document.startViewTransition) { setTimeout(() => apply(next), 80); return; }
+    setTimeout(() => {
+      const fromRight = toggle.getBoundingClientRect().left > innerWidth / 2;
+      root.classList.add('theme-vt');
+      const vt = document.startViewTransition(() => apply(next));
+      vt.ready.then(() => root.animate(
+        { clipPath: [fromRight ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', 'inset(0 0 0 0)'] },
+        { duration: 360, easing: 'cubic-bezier(.65, 0, .35, 1)', pseudoElement: '::view-transition-new(root)' }));
+      vt.finished.finally(() => root.classList.remove('theme-vt'));
+    }, 80);
+  });
+
+  // Hero phones: tap one at the back and it trades places with the one in front.
+  const phones = [...document.querySelectorAll('.hero-phones .phone')];
+  const slots = ['ph-left', 'ph-main', 'ph-right'];
+  const slotOf = (el) => slots.find((c) => el.classList.contains(c));
+  const syncPhones = () => phones.forEach((el) => {
+    const front = slotOf(el) === 'ph-main';
+    el.setAttribute('role', front ? 'img' : 'button');
+    el.tabIndex = front ? -1 : 0;
+    el.setAttribute('aria-label', front ? 'In front' : 'Bring this screen to the front');
+  });
+  const bringFront = (el) => {
+    const main = phones.find((p) => slotOf(p) === 'ph-main');
+    if (!main || main === el) return;
+    const slot = slotOf(el);
+    el.closest('.hero-phones')?.classList.add('settled');
+    main.classList.replace('ph-main', slot);
+    el.classList.replace(slot, 'ph-main');
+    syncPhones();
+  };
+  phones.forEach((el) => {
+    el.addEventListener('click', () => bringFront(el));
+    el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); bringFront(el); } });
+  });
+  syncPhones();
+  setTimeout(() => document.querySelector('.hero-phones')?.classList.add('settled'), 2000);
 
   // Search the 99 Names; tap a Name to show its reflection (its name links to its page).
   const q = document.getElementById('q');

@@ -8,6 +8,7 @@ screenshots inside a photo phone frame (the same frames as the Budget-AI listing
    `adb exec-out screencap -p > raw.png`.
 2. **Clean the status bar** (Samsung ignores demo mode, so it is painted over: 09:41, wifi, signal, battery 100; the app moves 28 px down under a band of its own colour, captures stay untouched in `device/`):
    `python3 tool/cleanbar.py device/<name>.png ready/<name>.png`
+   The website's phones use `--bare` (no bar, no gesture handle): `website/scripts/phones.sh` does it.
 3. **Put it in a frame**: `python3 tool/composite.py composed/<out>.png frames/<frame>.png ready/<shot>.png [ready/<back-shot>.png]`
    Frames: `hand-phone` (first shot), `phone-tilt-left`, `phone-tilt-right`, `phone-front`, `phone-pair` (two screens: front first).
 4. **Render**: `./render.sh` → `out/`, then copy to `../playstore/` (`feature-graphic.png` → `feature_graphic.png`).

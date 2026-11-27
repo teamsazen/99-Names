@@ -61,16 +61,12 @@ const grid = names
 // An app capture in a real phone frame (website/scripts/phones.sh). A screen with a dark
 // capture in public/img/dark/ follows the visitor's light or dark setting.
 const phone = (_, name, cls, alt, eager) => {
-  const img = `<img src="/img/${name}.webp" alt="${alt}" width="780" height="1570"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+  const img = (file, theme, label) => `<img${theme ? ` class="${theme}"` : ''} src="/img/${file}.webp" alt="${label ? alt : ''}"${label ? '' : ' aria-hidden="true"'} width="780" height="1570"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
   const pic = existsSync(path.join(here, 'public/img/dark', `${name}.webp`))
-    ? `<picture><source media="(prefers-color-scheme: dark)" srcset="/img/dark/${name}.webp">${img}</picture>`
-    : img;
+    ? img(name, 'th-light', true) + img(`dark/${name}`, 'th-dark', false)
+    : img(name, '', true);
   return `<div class="phone ${cls}">${pic}</div>`;
 };
-
-// Every Name for the live "Name of the day" card; "<" escaped so it can sit in a script tag.
-const namesJson = JSON.stringify(names.map((n) => ({ n: n.number, ar: n.arabic, tr: n.transliteration, en: n.english, ur: n.urdu, rf: n.reflection, path: n.path })))
-  .replace(/</g, '\\u003c');
 
 // Cache-busting: the stylesheet and script versions follow their content.
 const version = async (file) => createHash('sha256').update(await readFile(path.join(here, 'public', file))).digest('hex').slice(0, 8);
@@ -92,7 +88,6 @@ const terms = await readFile(path.join(here, '..', 'docs/terms/index.html'), 'ut
 await writeFile(path.join(dist, 'terms/index.html'), bust(terms));
 const home = bust(template
   .replace('{{NAMES}}', grid)
-  .replace('{{NAMES_JSON}}', () => namesJson)
   .replace(/\{\{PHONE (\w+) ([\w-]+) "([^"]*)"( eager)?\}\}/g, phone));
 if (home.includes('{{')) throw new Error(`Unfilled placeholder in index.html: ${home.match(/\{\{[^}]*\}\}/)[0]}`);
 await writeFile(path.join(dist, 'index.html'), home);
