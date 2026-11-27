@@ -1,7 +1,6 @@
 #!/bin/sh
 # Renders index.html into out/: eight 1620x2880 Play screenshots and the 1024x500 feature
-# graphic. Needs Google Chrome. Refresh the screens first with
-#   (cd native && ./gradlew :app:recordPaparazziDebug) and copy them into screens/.
+# graphic. Needs Google Chrome. The framed phones come from composed/ (see README.md).
 set -e
 cd "$(dirname "$0")"
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"

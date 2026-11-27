@@ -4,19 +4,20 @@
 <meta charset="utf-8">
 <title>99 Names Play Screenshots</title>
 <!--
-  Play Store screenshots for 99 Names, in the style of the Urdu Audio Quran listing but
-  without people: only the real app screens (rendered by native/…/StoreShots.kt with
-  Paparazzi) in phone frames. Render with store/listing/render.sh → out/*.png.
-  Open index.html#s3 to see one screenshot alone.
+  Play Store screenshots for 99 Names. Each one is a headline plus a real phone frame
+  (photo frames in frames/, from the Budget-AI listing) holding a screenshot taken on a
+  real phone. No people. Pipeline (see README.md in this folder):
+    device/*.png   captures from the phone, status bar cleaned by tool/cleanbar.py
+    composed/*.png device captures mapped onto the frames by tool/composite.py
+  Render with render.sh → out/*.png. Open index.html#s3 to see one screenshot alone.
 -->
 <style>
 @font-face { font-family: "GSans"; src: url("../../tool/fonts_src/GoogleSans[GRAD,opsz,wght].ttf"); font-weight: 100 900; }
 @font-face { font-family: "Harmattan"; src: url("../../tool/fonts_src/Harmattan-Regular.ttf"); }
 @font-face { font-family: "Nastaleeq"; src: url("../../tool/fonts_src/JameelNooriNastaleeq.ttf"); }
 :root {
-  --stone: #F6F3EC; --stone-2: #ECE7DC; --card: #FFFFFF; --title: #1A1712; --muted: #7A7368;
-  --bronze: #86622B; --ink: #101820; --ink-2: #16202A; --ink-3: #1F2A35; --gold: #D9BC89;
-  --cream: #F7F3EA; --hero-muted: #A9B2B9;
+  --stone: #F6F3EC; --card: #FFFFFF; --title: #1A1712; --muted: #7A7368;
+  --bronze: #86622B; --ink: #101820; --gold: #D9BC89; --cream: #F7F3EA; --hero-muted: #A9B2B9;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #444; font-family: "GSans", sans-serif; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; }
@@ -24,181 +25,118 @@ body.one { padding: 0; gap: 0; background: none; }
 body.one .shot:not(.on), body.one .fg:not(.on) { display: none; }
 
 .shot { position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none; }
-.stone { background: radial-gradient(110% 60% at 50% 100%, #E9E2D3 0%, var(--stone) 62%); color: var(--title); }
-.ink { background: radial-gradient(120% 70% at 80% 100%, #22303D 0%, var(--ink) 58%, #0A0E12 100%); color: var(--cream); }
+.stone { background: radial-gradient(120% 70% at 50% 100%, #E7DFCD 0%, var(--stone) 60%); color: var(--title); }
+.ink { background: radial-gradient(120% 70% at 70% 100%, #22303D 0%, var(--ink) 58%, #0A0E12 100%); color: var(--cream); }
 
-/* soft gold glow, the app's own backdrop for the Arabic */
 .glow { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1;
-  background: radial-gradient(closest-side, rgba(217,188,137,.30), rgba(217,188,137,0)); }
+  background: radial-gradient(closest-side, rgba(217,188,137,.26), rgba(217,188,137,0)); }
 .stone .glow { background: radial-gradient(closest-side, rgba(134,98,43,.16), rgba(134,98,43,0)); }
 
-.brand { position: absolute; top: 80px; left: 76px; right: 76px; display: flex; align-items: center; gap: 22px; z-index: 5; }
-.brand img { width: 84px; height: 84px; border-radius: 22px; }
-.brand b { font-weight: 600; font-size: 38px; letter-spacing: -.01em; }
-.brand .ar { margin-left: auto; font-family: "Harmattan"; font-size: 50px; line-height: 1; padding: 12px 32px 20px; border-radius: 99px; }
-.stone .brand .ar { background: var(--ink); color: var(--gold); }
-.ink .brand .ar { color: var(--gold); border: 2px solid rgba(217,188,137,.45); background: rgba(247,243,234,.06); }
+.brand { position: absolute; top: 96px; left: 84px; right: 84px; display: flex; align-items: center; gap: 22px; z-index: 5; }
+.brand img { width: 88px; height: 88px; border-radius: 22px; box-shadow: 0 10px 24px -8px rgba(0,0,0,.35); }
+.brand div { display: flex; flex-direction: column; gap: 4px; }
+.brand b { font-weight: 650; font-size: 40px; letter-spacing: -.01em; line-height: 1; }
+.brand small { font-size: 22px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; }
+.stone .brand small { color: var(--muted); } .ink .brand small { color: var(--hero-muted); }
 
-.hl { position: absolute; left: 76px; right: 70px; top: 220px; z-index: 4; font-weight: 700; font-size: 124px; line-height: 1.0; letter-spacing: -.035em; }
+.hl { position: absolute; left: 80px; right: 60px; top: 250px; z-index: 4; font-weight: 750; font-size: 132px; line-height: .98; letter-spacing: -.04em; }
 .hl span { display: block; }
 .stone .hl .acc { color: var(--bronze); }
 .ink .hl .acc { color: var(--gold); }
-.sub { position: absolute; left: 78px; right: 90px; z-index: 4; font-size: 40px; line-height: 1.3; }
-.stone .sub { color: var(--muted); } .ink .sub { color: rgba(247,243,234,.74); }
+.sub { position: absolute; left: 84px; right: 110px; top: 540px; z-index: 4; font-size: 42px; line-height: 1.28; font-weight: 450; }
+.stone .sub { color: var(--muted); } .ink .sub { color: rgba(247,243,234,.72); }
+.sub .ur { font-family: "Nastaleeq"; font-size: 48px; }
 
-.chips { position: absolute; left: 76px; right: 60px; z-index: 6; display: flex; flex-wrap: wrap; gap: 16px; }
-.chip { display: inline-flex; align-items: center; gap: 12px; padding: 20px 30px; border-radius: 99px; font-size: 34px; font-weight: 600; white-space: nowrap; }
-.stone .chip { background: var(--card); color: var(--title); box-shadow: 0 10px 30px -10px rgba(60,45,20,.25); }
-.stone .chip.solid { background: var(--ink); color: var(--cream); }
-.ink .chip { background: rgba(247,243,234,.08); color: var(--cream); border: 2px solid rgba(247,243,234,.16); }
-.ink .chip.solid { background: var(--gold); color: #14100A; border-color: var(--gold); }
-.chip .ur { font-family: "Nastaleeq"; font-weight: 400; font-size: 40px; line-height: 1; padding-bottom: 8px; }
-.chip svg { width: 32px; height: 32px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-
-/* Phone: titanium rim, black bezel, punch-hole, status bar, then the real screen. */
-.phone { position: absolute; z-index: 3; width: 640px; padding: 16px; border-radius: 84px;
-  background: linear-gradient(145deg, #5b6068, #2a2e33 40%, #6a6f77 60%, #24272b);
-  box-shadow: 0 70px 110px -30px rgba(0,0,0,.55), 0 20px 40px -12px rgba(0,0,0,.35); }
-.ink .phone { box-shadow: 0 80px 130px -30px rgba(0,0,0,.8), 0 0 120px rgba(217,188,137,.08); }
-.phone .scr { position: relative; border-radius: 70px; overflow: hidden; background: #000; border: 10px solid #050607; }
-.phone .scr img { display: block; width: 100%; }
-.phone .sb { height: 62px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px 0 46px;
-  font-size: 25px; font-weight: 600; color: #F7F3EA; background: var(--ink); }
-.phone .sb.dk { background: #0A0E12; } .phone .sb.hd { background: var(--ink-2); }
-.phone .sb.lt { background: var(--stone); color: #1A1712; }
-.phone .sb i { width: 22px; height: 22px; border-radius: 50%; background: #050607; position: absolute; left: 50%; top: 20px; margin-left: -11px; }
-.phone .sb svg { width: 74px; height: 22px; fill: currentColor; }
-
-/* Floating card: a piece of a screen lifted out and enlarged. */
-.lift { position: absolute; z-index: 7; overflow: hidden; border-radius: 44px;
-  box-shadow: 0 50px 90px -24px rgba(0,0,0,.6), 0 0 0 2px rgba(217,188,137,.25); }
-.lift img { position: absolute; }
-
-.verse { position: absolute; z-index: 4; left: 0; right: 0; text-align: center; }
-.verse .ar { font-family: "Harmattan"; font-size: 88px; line-height: 1.4; color: var(--gold); }
-.verse .ref { font-size: 28px; letter-spacing: .16em; font-weight: 600; color: var(--hero-muted); }
+/* the framed phone: a 2:3 composite, bleeding off the bottom of the shot */
+.ph { position: absolute; z-index: 3; width: 1240px; left: -80px; top: 660px; }
+.ph.r { left: -60px; }
+.stone .ph { filter: drop-shadow(0 40px 60px rgba(60,45,20,.22)); }
+.ink .ph { filter: drop-shadow(0 50px 80px rgba(0,0,0,.55)); }
 
 /* Feature graphic 1024x500 */
-.fg { position: relative; width: 1024px; height: 500px; overflow: hidden; flex: none; color: var(--cream);
-  background: radial-gradient(80% 120% at 85% 80%, #22303D 0%, var(--ink) 55%, #0A0E12 100%); }
-.fg .logo { position: absolute; left: 76px; top: 64px; width: 150px; border-radius: 34px; box-shadow: 0 18px 30px rgba(0,0,0,.45); }
+.fg { position: relative; width: 1024px; height: 500px; overflow: hidden; flex: none; color: var(--title);
+  background: radial-gradient(80% 120% at 85% 80%, #E7DFCD 0%, var(--stone) 60%); }
+.fg .logo { position: absolute; left: 76px; top: 64px; width: 150px; border-radius: 34px; box-shadow: 0 16px 28px -6px rgba(60,45,20,.35); }
 .fg .t1 { position: absolute; left: 252px; top: 78px; font-size: 60px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
-.fg .t2 { position: absolute; left: 254px; top: 150px; font-size: 30px; color: var(--hero-muted); font-weight: 500; }
-.fg .t3 { position: absolute; left: 80px; top: 262px; width: 540px; font-size: 32px; line-height: 1.3; color: rgba(247,243,234,.88); font-weight: 500; }
-.fg .t3 b { color: var(--gold); font-weight: 600; }
-.fg .pill { position: absolute; left: 80px; top: 400px; font-size: 21px; font-weight: 600; letter-spacing: .02em; padding: 11px 22px; border-radius: 99px; border: 2px solid var(--gold); color: var(--gold); }
-.fg .phone { width: 300px; padding: 8px; border-radius: 42px; }
-.fg .phone .scr { border-radius: 35px; border-width: 5px; }
-.fg .phone .sb { height: 29px; font-size: 12px; padding: 0 20px; }
-.fg .phone .sb i { width: 11px; height: 11px; top: 9px; margin-left: -5px; }
-.fg .phone .sb svg { width: 36px; height: 11px; }
+.fg .t2 { position: absolute; left: 254px; top: 150px; font-size: 30px; color: var(--muted); font-weight: 500; }
+.fg .t3 { position: absolute; left: 80px; top: 262px; width: 520px; font-size: 32px; line-height: 1.3; color: var(--title); font-weight: 500; }
+.fg .t3 b { color: var(--bronze); font-weight: 600; }
+.fg .pill { position: absolute; left: 80px; top: 400px; font-size: 21px; font-weight: 600; letter-spacing: .02em; padding: 11px 22px; border-radius: 99px; border: 2px solid var(--bronze); color: var(--bronze); }
+.fg .ph { width: 420px; left: 610px; top: 6px; filter: drop-shadow(0 26px 36px rgba(60,45,20,.28)); }
 </style>
 </head>
 <body>
 
 <!-- 1 · Hero -->
 <section class="shot stone" id="s1">
-  <div class="brand"><img src="logo.png"><b>99 Names</b><span class="ar">أسماء الله الحسنى</span></div>
-  <h1 class="hl"><span>The 99 Names,</span><span class="acc">by heart.</span></h1>
-  <p class="sub" style="top:490px">Arabic, transliteration and the meaning in English and Urdu.</p>
-  <div class="chips" style="top:640px">
-    <span class="chip solid">All 99 Names</span>
-    <span class="chip">English + <span class="ur">اردو</span></span>
-    <span class="chip">Offline</span>
-  </div>
-  <div class="glow" style="width:1100px;height:1100px;left:-10px;top:880px"></div>
-  <div class="phone" data-screen="name-light" style="left:470px;top:900px;transform:rotate(6deg)"></div>
-  <div class="phone" data-screen="home-light" style="left:-40px;top:820px;transform:rotate(-5deg)"></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <h1 class="hl"><span>Learn the 99</span><span class="acc">Names of Allah.</span></h1>
+  <p class="sub">Each Name in Arabic, with its meaning in English and <span class="ur">اردو</span>, and a short reflection.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph" src="composed/hero.png" style="width:1500px;left:-130px;top:690px">
 </section>
 
 <!-- 2 · Every Name -->
 <section class="shot ink" id="s2">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
-  <h1 class="hl"><span>Every Name,</span><span class="acc">its meaning.</span></h1>
-  <p class="sub" style="top:490px">The Arabic, its English and Urdu meaning, and a short reflection.</p>
-  <div class="chips" style="top:640px">
-    <span class="chip solid">Swipe between Names</span>
-    <span class="chip">Copy &amp; share</span>
-  </div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <h1 class="hl"><span>All 99 Names,</span><span class="acc">in one place.</span></h1>
+  <p class="sub">Tap any Name to read its meaning in English and Urdu.</p>
   <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
-  <div class="phone" data-screen="name-light" style="left:220px;top:800px"></div>
+  <img class="ph" src="composed/home.png">
 </section>
 
 <!-- 3 · Name of the day -->
 <section class="shot stone" id="s3">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
   <h1 class="hl"><span>A new Name</span><span class="acc">every day.</span></h1>
-  <p class="sub" style="top:490px">The same Name for everyone, through all 99 in turn.</p>
-  <div class="phone" data-screen="home-dark" style="left:220px;top:760px"></div>
-  <!-- the daily card from home-dark (1080px wide screen: card at 45..1035 x 172..490) -->
-  <div class="lift" style="left:60px;top:900px;width:960px;height:310px">
-    <img src="screens/home-dark.png" style="width:1047px;left:-44px;top:-167px">
-  </div>
+  <p class="sub">The same Name for everyone, through all 99 in turn.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph r" src="composed/day.png">
 </section>
 
 <!-- 4 · Search -->
 <section class="shot ink" id="s4">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
   <h1 class="hl"><span>Find any Name</span><span class="acc">in seconds.</span></h1>
-  <div class="chips" style="top:500px">
-    <span class="chip solid">By name</span>
-    <span class="chip">Meaning</span>
-    <span class="chip">Number</span>
-    <span class="chip"><span class="ur">اردو</span></span>
-    <span class="chip">Arabic</span>
-  </div>
-  <div class="glow" style="width:1100px;height:1100px;left:0;top:800px"></div>
-  <div class="phone" data-screen="search-light" style="left:220px;top:760px"></div>
+  <p class="sub">Search by name, meaning, number, Arabic or Urdu.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph" src="composed/search.png">
 </section>
 
 <!-- 5 · Favourites -->
 <section class="shot stone" id="s5">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
-  <h1 class="hl"><span>Keep the Names</span><span class="acc">close to you.</span></h1>
-  <p class="sub" style="top:490px">Tap the heart and a Name waits for you on its own shelf.</p>
-  <div class="chips" style="top:640px">
-    <span class="chip solid"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z"/></svg>Favourites</span>
-  </div>
-  <div class="phone" data-screen="favourites-dark" style="left:220px;top:800px"></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <h1 class="hl"><span>Keep them</span><span class="acc">close to you.</span></h1>
+  <p class="sub">Tap the heart and a Name waits for you on its own shelf.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph r" src="composed/fav.png">
 </section>
 
 <!-- 6 · Sources -->
 <section class="shot ink" id="s6">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
-  <h1 class="hl" style="font-size:112px"><span>From trusted</span><span class="acc">sources.</span></h1>
-  <p class="sub" style="top:470px">Arabic and meanings from Jami at-Tirmidhi 3507 and its English and Urdu translations.</p>
-  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:720px"></div>
-  <div class="phone" data-screen="name-dark" style="left:220px;top:760px"></div>
-  <!-- the Urdu meaning card from name-light-wadud (card at 45..1035 x 1290..1470) -->
-  <div class="lift" style="left:70px;top:1560px;width:940px;height:171px">
-    <img src="screens/name-light-wadud.png" style="width:1026px;left:-43px;top:-1225px">
-  </div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <h1 class="hl" style="font-size:120px"><span>From trusted</span><span class="acc">sources.</span></h1>
+  <p class="sub" style="top:520px">Arabic and meanings from Jami at-Tirmidhi 3507 and its English and Urdu translations.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph" src="composed/sources.png" style="top:700px">
 </section>
 
 <!-- 7 · Settings -->
 <section class="shot stone" id="s7">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
   <h1 class="hl"><span>Make it</span><span class="acc">yours.</span></h1>
-  <p class="sub" style="top:490px">Choose what each card shows and how large the Arabic is.</p>
-  <div class="chips" style="top:640px">
-    <span class="chip solid">Larger Arabic</span>
-    <span class="chip">Show or hide meanings</span>
-  </div>
-  <div class="phone" data-screen="settings-light" style="left:220px;top:800px"></div>
+  <p class="sub">Choose what each card shows and how large the Arabic is.</p>
+  <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
+  <img class="ph r" src="composed/settings.png">
 </section>
 
 <!-- 8 · Light or dark -->
 <section class="shot ink" id="s8">
-  <div class="brand"><img src="logo.png"><b>99 Names</b></div>
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
   <h1 class="hl"><span>Light or dark.</span><span class="acc">Fully offline.</span></h1>
-  <div class="chips" style="top:500px">
-    <span class="chip solid">No ads</span>
-    <span class="chip">No account</span>
-    <span class="chip">Just ~2 MB</span>
-  </div>
+  <p class="sub">No ads, no account, and only about 2 MB.</p>
   <div class="glow" style="width:1200px;height:1200px;left:-60px;top:760px"></div>
-  <div class="phone" data-screen="home-light" style="left:-30px;top:800px;transform:rotate(-5deg)"></div>
-  <div class="phone" data-screen="home-dark" style="left:470px;top:880px;transform:rotate(5deg)"></div>
+  <img class="ph" src="composed/modes.png" style="left:-90px;top:640px">
 </section>
 
 <!-- Feature graphic -->
@@ -208,18 +146,10 @@ body.one .shot:not(.on), body.one .fg:not(.on) { display: none; }
   <div class="t2">Asmaul Husna</div>
   <div class="t3">Allah's beautiful Names with their meaning in <b>English</b> and <b>Urdu</b>.</div>
   <div class="pill">FREE · OFFLINE · NO ADS</div>
-  <div class="phone" data-screen="name-dark" style="left:648px;top:56px;transform:rotate(7deg)"></div>
+  <img class="ph" src="composed/fg.png">
 </section>
 
 <script>
-// Fill each phone: status bar (its colour taken from the top of the screen) + the screen.
-const bars = { 'home-light': '', 'home-dark': 'hd', 'name-light': '', 'name-dark': 'hd', 'name-light-wadud': '',
-  'search-light': '', 'favourites-dark': 'hd', 'settings-light': 'lt', 'settings-dark': 'dk' };
-const icons = '<svg viewBox="0 0 74 22"><rect x="0" y="12" width="4" height="8" rx="1"/><rect x="6" y="8" width="4" height="12" rx="1"/><rect x="12" y="4" width="4" height="16" rx="1"/><path d="M30 18l-8-9a12 12 0 0 1 16 0z"/><rect x="46" y="4" width="24" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="49" y="7" width="15" height="8" rx="1"/><rect x="71" y="8" width="2" height="6" rx="1"/></svg>';
-for (const p of document.querySelectorAll('[data-screen]')) {
-  const s = p.dataset.screen;
-  p.innerHTML = `<div class="scr"><div class="sb ${bars[s]}"><span>9:41</span><i></i>${icons}</div><img src="screens/${s}.png"></div>`;
-}
 if (location.hash) {
   document.body.classList.add('one');
   document.querySelector(location.hash).classList.add('on');

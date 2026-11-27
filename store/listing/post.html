@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>99 Names Social Posts</title>
+<!--
+  4:5 social posts (1080x1350) made from the same framed phones as the Play listing
+  (composed/, see README.md), laid out so every phone is whole: nothing is cropped.
+  object-view-box trims each composed image to its phone, so the phone fills its box.
+  Render with render-post.sh → out/post-*.png. Open post.html#p3 to see one post alone.
+-->
+<style>
+@font-face { font-family: "GSans"; src: url("../../tool/fonts_src/GoogleSans[GRAD,opsz,wght].ttf"); font-weight: 100 900; }
+@font-face { font-family: "Nastaleeq"; src: url("../../tool/fonts_src/JameelNooriNastaleeq.ttf"); }
+:root {
+  --stone: #F6F3EC; --title: #1A1712; --muted: #7A7368;
+  --bronze: #86622B; --ink: #101820; --gold: #D9BC89; --cream: #F7F3EA; --hero-muted: #A9B2B9;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #444; font-family: "GSans", sans-serif; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; }
+body.one { padding: 0; gap: 0; background: none; }
+body.one .post:not(.on) { display: none; }
+
+.post { position: relative; width: 1080px; height: 1350px; overflow: hidden; flex: none; }
+.stone { background: radial-gradient(120% 80% at 80% 100%, #E7DFCD 0%, var(--stone) 62%); color: var(--title); }
+.ink { background: radial-gradient(120% 80% at 80% 100%, #22303D 0%, var(--ink) 58%, #0A0E12 100%); color: var(--cream); }
+
+.glow { position: absolute; border-radius: 50%; pointer-events: none; width: 1000px; height: 1000px; right: -260px; bottom: -300px;
+  background: radial-gradient(closest-side, rgba(217,188,137,.24), rgba(217,188,137,0)); }
+.stone .glow { background: radial-gradient(closest-side, rgba(134,98,43,.15), rgba(134,98,43,0)); }
+
+.brand { position: absolute; top: 64px; left: 64px; display: flex; align-items: center; gap: 18px; z-index: 5; }
+.brand img { width: 72px; height: 72px; border-radius: 18px; box-shadow: 0 8px 20px -8px rgba(0,0,0,.35); }
+.brand div { display: flex; flex-direction: column; gap: 4px; }
+.brand b { font-weight: 650; font-size: 32px; letter-spacing: -.01em; line-height: 1; }
+.brand small { font-size: 17px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; }
+.stone .brand small { color: var(--muted); } .ink .brand small { color: var(--hero-muted); }
+
+/* text column on the left, phone on the right */
+.copy { position: absolute; left: 64px; top: 200px; width: 440px; z-index: 4; }
+.hl { font-weight: 750; font-size: 74px; line-height: 1; letter-spacing: -.04em; }
+.hl span { display: block; }
+.stone .hl .acc { color: var(--bronze); } .ink .hl .acc { color: var(--gold); }
+.sub { margin-top: 28px; font-size: 30px; line-height: 1.3; font-weight: 450; }
+.stone .sub { color: var(--muted); } .ink .sub { color: rgba(247,243,234,.72); }
+.sub .ur { font-family: "Nastaleeq"; font-size: 36px; }
+
+.pill { position: absolute; left: 64px; bottom: 64px; z-index: 4; font-size: 21px; font-weight: 650; letter-spacing: .06em;
+  padding: 13px 24px; border-radius: 99px; border: 2px solid currentColor; }
+.stone .pill { color: var(--bronze); } .ink .pill { color: var(--gold); }
+
+.ph { position: absolute; z-index: 3; object-fit: contain; object-position: center bottom;
+  left: 530px; right: 36px; top: 96px; bottom: 44px; width: calc(100% - 566px); height: calc(100% - 140px); }
+.stone .ph { filter: drop-shadow(0 30px 44px rgba(60,45,20,.24)); }
+.ink .ph { filter: drop-shadow(0 36px 56px rgba(0,0,0,.6)); }
+/* trim each composed image to its phone (intrinsic px: top right bottom left) */
+.tl { object-view-box: inset(84px 360px 167px 362px); }   /* phone-tilt-left */
+.tr { object-view-box: inset(46px 390px 154px 327px); }   /* phone-tilt-right */
+.pair { object-view-box: inset(79px 139px 95px 138px); }  /* phone-pair */
+
+/* first post: text across the top, the hand and phone rising from the bottom edge */
+.hero .copy { width: 900px; top: 190px; }
+.hero .hl { font-size: 100px; }
+.hero .sub { width: 640px; }
+.hero .ph { object-view-box: inset(36px 213px 0 83px); left: 150px; right: 0; top: 480px; bottom: 0;
+  width: 930px; height: 870px; object-position: right top; }
+.hero .pill { bottom: 64px; }
+/* first post: the app's size, big, in the empty space left of the hand */
+.size { position: absolute; left: 64px; top: 640px; z-index: 4; display: flex; flex-direction: column; }
+.size b { font-weight: 800; font-size: 190px; line-height: .9; letter-spacing: -.05em; color: var(--bronze); }
+.size span { margin-top: 14px; padding-left: 8px; font-size: 54px; font-weight: 600; letter-spacing: -.01em; color: var(--muted); }
+
+/* two phones need more width */
+.wide .copy { width: 400px; }
+.wide .ph { left: 470px; width: calc(100% - 506px); }
+</style>
+</head>
+<body>
+
+<!-- 1 · Hero -->
+<section class="post stone hero" id="p1">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>Learn the 99</span><span class="acc">Names of Allah.</span></h1>
+    <p class="sub">Each Name in Arabic, with its meaning in English and <span class="ur">اردو</span>.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph" src="composed/hero.png">
+  <div class="size"><b>2 MB</b><span>Only</span></div>
+  <div class="pill">FREE · OFFLINE · NO ADS</div>
+</section>
+
+<!-- 2 · Light or dark -->
+<section class="post ink wide" id="p2">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>Light or dark.</span><span class="acc">Fully offline.</span></h1>
+    <p class="sub">No ads, no account, and only about 2 MB.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph pair" src="composed/modes.png">
+  <div class="pill">FREE ON ANDROID</div>
+</section>
+
+<!-- 3 · Name of the day -->
+<section class="post stone" id="p3">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>A new Name</span><span class="acc">every day.</span></h1>
+    <p class="sub">The same Name for everyone, through all 99 in turn.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tr" src="composed/day.png">
+  <div class="pill">NAME OF THE DAY</div>
+</section>
+
+<!-- 4 · Search -->
+<section class="post ink" id="p4">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>Find any Name</span><span class="acc">in seconds.</span></h1>
+    <p class="sub">Search by name, meaning, number, Arabic or Urdu.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tl" src="composed/search.png">
+  <div class="pill">ENGLISH · اردو · عربي</div>
+</section>
+
+<!-- 5 · Every Name -->
+<section class="post stone" id="p5">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>All 99 Names,</span><span class="acc">in one place.</span></h1>
+    <p class="sub">Tap any Name to read its meaning in English and Urdu.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tl" src="composed/home.png">
+  <div class="pill">ALL 99 NAMES</div>
+</section>
+
+<!-- 6 · Favourites -->
+<section class="post ink" id="p6">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>Keep them</span><span class="acc">close to you.</span></h1>
+    <p class="sub">Tap the heart and a Name waits for you on its own shelf.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tr" src="composed/fav.png">
+  <div class="pill">FAVOURITES</div>
+</section>
+
+<!-- 7 · Sources -->
+<section class="post stone" id="p7">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>From trusted</span><span class="acc">sources.</span></h1>
+    <p class="sub">Arabic and meanings from Jami at-Tirmidhi 3507 and its English and Urdu translations.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tl" src="composed/sources.png">
+  <div class="pill">NO MACHINE TRANSLATION</div>
+</section>
+
+<!-- 8 · Settings -->
+<section class="post ink" id="p8">
+  <div class="brand"><img src="logo.png"><div><b>99 Names</b><small>Asmaul Husna</small></div></div>
+  <div class="copy">
+    <h1 class="hl"><span>Make it</span><span class="acc">yours.</span></h1>
+    <p class="sub">Choose what each card shows and how large the Arabic is.</p>
+  </div>
+  <div class="glow"></div>
+  <img class="ph tr" src="composed/settings.png">
+  <div class="pill">FREE ON GOOGLE PLAY</div>
+</section>
+
+<script>
+  const id = location.hash.slice(1);
+  if (id) { document.body.classList.add("one"); document.getElementById(id)?.classList.add("on"); }
+</script>
+</body>
+</html>

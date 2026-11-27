@@ -9,7 +9,8 @@
 
 ## tool/ and store/
 - `tool/subset_fonts.py` — the fonts in `native/app/src/main/res/font/` and `website/public/fonts/` are trimmed to the text drawn. **After changing any text, run it** (`pip install fonttools uharfbuzz brotli`; full fonts go in `tool/fonts_src/`, not committed — see its README). Skipping it shows missing glyphs.
-- Store and website screenshots: `native/…/StoreShots.kt` renders the real screens with Paparazzi (`cd native && ./gradlew :app:recordPaparazziDebug` → `app/src/test/snapshots/images/`). Copy them to `store/listing/screens/`, run `store/listing/render.sh` (8 Play shots 1620×2880 + feature graphic in `out/`), then copy to `store/playstore/`. No people in the listing.
+- Play listing: real-phone screenshots (`adb`) → `store/listing/device/` → `tool/cleanbar.py` paints the status bar → `ready/` → photo phone frames in `composed/` → `store/listing/render.sh` (8 shots 1620×2880 + feature graphic in `out/`) → copy to `store/playstore/`. `render-post.sh` makes 4:5 social posts (`post.html`) from the same phones. Steps in `store/listing/README.md`. Only a hand holding the phone (first shot); no other people.
+- Website screenshots: `native/…/StoreShots.kt` renders the real screens with Paparazzi (`cd native && ./gradlew :app:recordPaparazziDebug` → `app/src/test/snapshots/images/`).
 - Icon masters are in `design/brand/`; the launcher icons are exports of `app-icon.svg`.
 
 ## Rules

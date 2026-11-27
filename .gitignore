@@ -35,4 +35,7 @@ google-services.json
 
 # Store listing renders; the finished set is copied to store/playstore/
 /store/listing/out/
+# made by tool/cleanbar.py and tool/composite.py from device/ and frames/
+/store/listing/ready/
+/store/listing/composed/
 /store/listing/_preview.png
