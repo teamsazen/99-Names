@@ -71,6 +71,8 @@ The **99 Names name, logos, app icons, and branded artwork are not licensed for 
 
 ## Contributing
 
-Contributions are welcome! Open an issue or send a pull request.
+Contributions that make the app better are welcome: a correction with a reliable
+source, better data, or a tested fix. Please read [CONTRIBUTING.md](CONTRIBUTING.md)
+first; it explains what to send and what to write in your pull request.
 
 Made by [Sazen](https://teamsazen.com).
