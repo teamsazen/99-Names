@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -174,7 +175,11 @@ fun SettingsScreen() {
                             )
                         }, Glyph.External) { Actions.openStore(context, app.packageName) }
                     }
-                })
+                } + listOf<@Composable () -> Unit>({
+                    LinkRow("Our website", "All our apps and games · teamsazen.com", { SazenTile(42.dp) }, Glyph.External) {
+                        Actions.openSazen(context, "settings_row")
+                    }
+                }))
                 gap()
             }
             item {
@@ -189,7 +194,8 @@ fun SettingsScreen() {
                     @Composable { CreditRow(c) }
                 } + listOf<@Composable () -> Unit>({ LinkRow("Open Source Licences", null, null) { nav.push(Route.Licences) } }))
             }
-            item { Spacer(Modifier.height(32.dp)); Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars)) }
+            item { PoweredBy { Actions.openSazen(context, "powered_by") } }
+            item { Spacer(Modifier.height(24.dp)); Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars)) }
         }
         GlassBar(raised, "Settings", leading = { CircleButton(Glyph.Back, "Back") { nav.pop() } })
     }
@@ -224,6 +230,33 @@ private fun BrandCard() {
                     }
                 }
             }
+        }
+    }
+}
+
+/** The Sazen "S" on an ink tile, the same shape as the other apps' icons. */
+@Composable
+private fun SazenTile(size: Dp) {
+    val p = palette
+    Box(Modifier.size(size).clip(RoundedCornerShape(AppRadius.icon)).background(p.hero), contentAlignment = Alignment.Center) {
+        Image(painterResource(R.drawable.sazen_logo), null, Modifier.size(size * .56f), colorFilter = ColorFilter.tint(p.onHero))
+    }
+}
+
+/** "Powered by Sazen" at the foot of Settings; tapping it opens Sazen's website. */
+@Composable
+private fun PoweredBy(onClick: () -> Unit) {
+    val p = palette
+    Box(Modifier.fillMaxWidth().padding(top = 28.dp), contentAlignment = Alignment.Center) {
+        Row(
+            Modifier.clip(RoundedCornerShape(50)).rowButton(onClick).padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Txt("Powered by", style(13.sp, p.muted))
+            Spacer(Modifier.width(8.dp))
+            Image(painterResource(R.drawable.sazen_logo), null, Modifier.size(16.dp), colorFilter = ColorFilter.tint(p.title))
+            Spacer(Modifier.width(5.dp))
+            Txt("Sazen", style(14.sp, p.title, FontWeight.Bold, letterSpacing = (-.2).sp))
         }
     }
 }

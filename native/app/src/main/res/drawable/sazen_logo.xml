@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Sazen "S" mark, from teamsazen.com/favicon.svg. Tinted in code from the palette. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <group android:translateX="512" android:translateY="512" android:scaleX="1.50187" android:scaleY="1.50187">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M118.95,-300H-75A187.5,187.5 0,0 0,-75 75H75A37.5,37.5 0,0 1,75 150H-170.55A32.25,32.25 0,0 0,-170.55 214.5H-80.25A10.5,10.5 0,0 1,-80.25 235.5H-118.95A32.25,32.25 0,0 0,-118.95 300H75A187.5,187.5 0,0 0,75 -75H-75A37.5,37.5 0,0 1,-75 -150H170.55A32.25,32.25 0,0 0,170.55 -214.5H80.25A10.5,10.5 0,0 1,80.25 -235.5H118.95A32.25,32.25 0,0 0,118.95 -300Z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M204.45,-300H230.25A32.25,32.25 0,0 1,230.25 -235.5H204.45A32.25,32.25 0,0 1,204.45 -300Z" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M-230.25,235.5H-204.45A32.25,32.25 0,0 1,-204.45 300H-230.25A32.25,32.25 0,0 1,-230.25 235.5Z" />
+    </group>
+</vector>

@@ -12,6 +12,7 @@ import android.os.Bundle
 object Actions {
     private const val PACKAGE = "com.muzamil.asmaulhusna"
     private const val SITE = "https://99.teamsazen.com"
+    private const val SAZEN = "https://teamsazen.com"
 
     fun share(context: Context) {
         Analytics.log("share_app")
@@ -37,8 +38,16 @@ object Actions {
     }
 
     /** Opens a page of the app's website in a Chrome Custom Tab in the app's ink colour. */
-    fun openPage(context: Context, path: String) {
-        val tab = Intent(Intent.ACTION_VIEW, Uri.parse("$SITE$path")).apply {
+    fun openPage(context: Context, path: String) = openUrl(context, "$SITE$path")
+
+    /** Opens Sazen's website (all our apps and games); [source] says which button was tapped. */
+    fun openSazen(context: Context, source: String) {
+        Analytics.log("open_sazen_website", "source" to source)
+        openUrl(context, SAZEN)
+    }
+
+    private fun openUrl(context: Context, url: String) {
+        val tab = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
             putExtras(Bundle().apply { putBinder("android.support.customtabs.extra.SESSION", null) })
             putExtra("android.support.customtabs.extra.TOOLBAR_COLOR", 0xFF101820.toInt())
             putExtra("androidx.browser.customtabs.extra.SHARE_STATE", 2)
