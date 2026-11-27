@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Edge to edge from the first frame; Compose draws everything else. -->
-    <style name="Theme.AsmaulHusna" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- Edge to edge from the first frame, set here and not in code (the Window bar-colour
+         setters are deprecated from Android 15). Compose draws everything else.
+         values-night swaps the base for the dark one; values-v29 / -v30 add newer flags. -->
+    <style name="Base.AsmaulHusna" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@color/background</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+    <style name="Theme.AsmaulHusna" parent="Base.AsmaulHusna" />
     <color name="background">#F6F3EC</color>
 </resources>

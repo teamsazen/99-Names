@@ -104,6 +104,11 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:35.2.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+    constraints {
+        // Play services and in-app updates still ask for fragment 1.1.0, which Play Console
+        // flags as outdated; lift it. Not a new library: only its version changes.
+        implementation("androidx.fragment:fragment:1.9.1")
+    }
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     testImplementation("junit:junit:4.13.2")

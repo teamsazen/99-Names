@@ -2,9 +2,8 @@ package com.muzamil.asmaulhusna
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.core.view.WindowCompat
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -15,11 +14,10 @@ import com.muzamil.asmaulhusna.data.Settings
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.auto(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
-        )
         super.onCreate(savedInstanceState)
+        // Edge to edge: the theme makes the bars transparent (no deprecated Window colour
+        // setters, unlike enableEdgeToEdge); AppRoot picks light or dark bar icons.
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         Settings.load(this)
         Analytics.init(this)
         setContent { AppRoot() }
