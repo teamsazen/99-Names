@@ -9,7 +9,9 @@ arrangement and detached flourish. Font credits remain in Settings and README.
 - `wordmark.svg`: black, transparent background; source of truth for geometry.
 - `wordmark-white.svg`: reversed lettering.
 - `wordmark-bronze.svg`: brand lettering on a transparent background.
-- `app-icon.svg`: bronze lettering on the ink-blue square.
+- `app-icon.svg`: the app icon ("Glow"), the same drawing as `AppLogo.kt`: ink blue
+  brightening toward the middle, a fine bronze double ring, and the lettering at 80%
+  in a soft bronze gradient.
 
 Brand colours: ink blue **#101820**, muted bronze **#D9BC89**.
 The icon uses the same colours in light and dark mode.
