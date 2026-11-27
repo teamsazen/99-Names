@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://99.teamsazen.com"><img src="store/playstore/feature_graphic.png" alt="99 Names - Asmaul Husna" width="1024"></a>
+  <a href="https://99.teamsazen.com"><img src=".github/readme/banner.png" alt="99 Names - Asmaul Husna" width="1024"></a>
   <h1>99 Names - Asmaul Husna</h1>
   <p>The 99 beautiful names of Allah. Arabic, English and Urdu. Fully offline.</p>
   <p><a href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna"><img src=".github/readme/google-play.svg" alt="Get it on Google Play" width="220" height="60"></a></p>
@@ -30,14 +30,14 @@ translation.
 ## Screenshots
 
 <p align="center">
-  <a href="store/playstore/01.png"><img src="store/playstore/01.png" alt="Learn the 99 Names of Allah" width="180"></a>
-  <a href="store/playstore/02.png"><img src="store/playstore/02.png" alt="All 99 Names, in one place" width="180"></a>
-  <a href="store/playstore/03.png"><img src="store/playstore/03.png" alt="A new Name every day" width="180"></a>
-  <a href="store/playstore/04.png"><img src="store/playstore/04.png" alt="Find any Name in seconds" width="180"></a>
-  <a href="store/playstore/05.png"><img src="store/playstore/05.png" alt="Keep them close to you" width="180"></a>
-  <a href="store/playstore/06.png"><img src="store/playstore/06.png" alt="From trusted sources" width="180"></a>
-  <a href="store/playstore/07.png"><img src="store/playstore/07.png" alt="Make it yours" width="180"></a>
-  <a href="store/playstore/08.png"><img src="store/playstore/08.png" alt="Light or dark, fully offline" width="180"></a>
+  <a href="store/playstore/01.png"><img src=".github/readme/screens/01.png" alt="Learn the 99 Names of Allah" width="180"></a>
+  <a href="store/playstore/02.png"><img src=".github/readme/screens/02.png" alt="All 99 Names, in one place" width="180"></a>
+  <a href="store/playstore/03.png"><img src=".github/readme/screens/03.png" alt="A new Name every day" width="180"></a>
+  <a href="store/playstore/04.png"><img src=".github/readme/screens/04.png" alt="Find any Name in seconds" width="180"></a>
+  <a href="store/playstore/05.png"><img src=".github/readme/screens/05.png" alt="Keep them close to you" width="180"></a>
+  <a href="store/playstore/06.png"><img src=".github/readme/screens/06.png" alt="From trusted sources" width="180"></a>
+  <a href="store/playstore/07.png"><img src=".github/readme/screens/07.png" alt="Make it yours" width="180"></a>
+  <a href="store/playstore/08.png"><img src=".github/readme/screens/08.png" alt="Light or dark, fully offline" width="180"></a>
 </p>
 
 ## Website
