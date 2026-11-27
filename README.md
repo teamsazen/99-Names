@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://99.teamsazen.com"><img src=".github/readme/banner.png" alt="99 Names - Asmaul Husna" width="1024"></a>
+  <a href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna"><img src=".github/readme/banner.png" alt="99 Names - Asmaul Husna" width="1024"></a>
   <h1>99 Names - Asmaul Husna</h1>
   <p>The 99 beautiful names of Allah. Arabic, English and Urdu. Fully offline.</p>
   <p><a href="https://play.google.com/store/apps/details?id=com.muzamil.asmaulhusna"><img src=".github/readme/google-play.svg" alt="Get it on Google Play" width="220" height="60"></a></p>
