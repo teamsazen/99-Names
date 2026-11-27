@@ -1,6 +1,6 @@
 // Page motion, as on urduquran.teamsazen.com: smooth scroll, headlines revealing line by
-// line, sections fading in, phones drifting with the scroll and the footer wordmark rising. Plus the live "Name of the day" card (the same
-// Name the app shows today), the 99 Names search, the screenshot gallery's arrows and the
+// line, sections fading in, phones drifting with the scroll. Plus the live "Name of the day" card (the same
+// Name the app shows today), the 99 Names search and the
 // privacy page's contents highlight. Without JS (or with Reduce Motion) everything is
 // simply visible.
 (() => {
@@ -81,26 +81,6 @@
   });
   for (const c of cards) c.addEventListener('click', (e) => { if (!e.target.closest('a')) c.classList.toggle('open'); });
 
-  // Gallery buttons scroll by roughly one screen of cards.
-  const track = document.getElementById('galTrack');
-  document.querySelectorAll('[data-gal]').forEach((b) => {
-    b.addEventListener('click', () => {
-      const card = track.querySelector('img');
-      const step = card ? card.getBoundingClientRect().width + 16 : 300;
-      const n = Math.max(1, Math.floor(track.clientWidth / step) - 1);
-      track.scrollBy({ left: Number(b.dataset.gal) * step * n, behavior: reduce ? 'auto' : 'smooth' });
-    });
-  });
-
-  // Giant footer wordmark: fill the width exactly.
-  const fit = () => document.querySelectorAll('[data-fit]').forEach((el) => {
-    el.style.fontSize = '100px';
-    const natural = [...el.children].reduce((w, c) => w + c.getBoundingClientRect().width, 0);
-    if (natural) el.style.fontSize = `${(el.clientWidth / natural) * 100 * 0.995}px`;
-  });
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(fit);
-  addEventListener('resize', fit);
-
   // Privacy page: highlight the section being read in the contents list.
   const tocLinks = [...document.querySelectorAll('.toc a')];
   if (tocLinks.length && hasIO) {
@@ -122,14 +102,13 @@
       h.classList.add('lines');
     });
 
-    const items = document.querySelectorAll('.head, .row-copy > :not(h2), .adv-list article, .deep-copy > :not(h2), .deep-art, .tech-copy > :not(h2), .tech-list li, .gal-track, .faq, .names .grid, .final .wrap > :not(h2), .legal-body section, .toc, .name-body .wrap > *, .name-pager');
+    const items = document.querySelectorAll('.head, .row-copy > :not(h2), .adv-list article, .deep-copy > :not(h2), .deep-art, .names .grid, .final .wrap > :not(h2), .legal-body section, .toc, .name-body .wrap > *, .name-pager');
     items.forEach((el, i) => {
       el.classList.add('reveal');
       el.style.transitionDelay = `${(i % 3) * 70}ms`;
     });
     onceVisible('.reveal', (el) => el.classList.add('in'));
     onceVisible('.lines', (el) => el.classList.add('in'));
-    onceVisible('.foot .wordmark', (el) => el.classList.add('in'), { threshold: 0.2 });
 
     // Phone pairs drift against the scroll for a little depth.
     const drifters = [...document.querySelectorAll('[data-drift]')];

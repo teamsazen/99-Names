@@ -10,13 +10,12 @@
 ## Build and website
 - `cd native`: `./gradlew :app:assembleDebug` (debug APK), `testDebugUnitTest` (data tests), `:app:bundleRelease` (Play AAB, signed with the upload key from `key.properties`; without it the debug key and no analytics). JDK 17+ and the Android SDK.
 - Code: `data/Names.kt` (the Names), `screens/` (Home, Name, Settings), `ui/` (theme, icons, widgets), `Actions.kt` (share, rate, links), `Analytics.kt` (events).
-- `website/` (99.teamsazen.com, Cloudflare Pages): `node build.mjs` fills `src/index.html` from `Names.kt`, writes a page per Name at `/names/<name>`, `sitemap.xml`, and copies `public/` and `docs/` (privacy, terms). Deploy with `npm run deploy`. Everything is self-hosted.
+- `website/` (99.teamsazen.com, Cloudflare Pages): `node build.mjs` fills `src/index.html` from `Names.kt`, writes a page per Name at `/names/<name>`, `sitemap.xml`, and copies `public/` and `docs/` (privacy, terms). Deploy with `npm run deploy`. Everything is self-hosted. Kept minimal like urduquran.teamsazen.com (no FAQ, gallery or tech section). Its phones are real captures in the real frame: `website/scripts/phones.sh` (from `store/listing/ready/`).
 - The README is for users: what the app does, screenshots, privacy, credits, licence. Technical notes go here, not there.
 
 ## tool/ and store/
 - `tool/subset_fonts.py` — the fonts in `native/app/src/main/res/font/` and `website/public/fonts/` are trimmed to the text drawn. **After changing any text, run it** (`pip install fonttools uharfbuzz brotli`; full fonts go in `tool/fonts_src/`, not committed — see its README). Skipping it shows missing glyphs.
 - Play listing: real-phone screenshots (`adb`) → `store/listing/device/` → `tool/cleanbar.py` paints the status bar → `ready/` → photo phone frames in `composed/` → `store/listing/render.sh` (8 shots 1620×2880 + feature graphic in `out/`) → copy to `store/playstore/`. `render-post.sh` makes 4:5 social posts (`post.html`) from the same phones. Steps in `store/listing/README.md`. After new store images run `store/listing/readme-images.sh` (rounded README copies in `.github/readme/`). Only a hand holding the phone (first shot); no other people.
-- Website screenshots: `native/…/StoreShots.kt` renders the real screens with Paparazzi (`cd native && ./gradlew :app:recordPaparazziDebug` → `app/src/test/snapshots/images/`).
 - Icon masters are in `design/brand/`; the launcher icons are exports of `app-icon.svg`.
 
 ## Rules

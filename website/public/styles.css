@@ -1,6 +1,6 @@
-/* 99 Names website, in the same Sazen layout as urduquran.teamsazen.com: a floating glass
-   pill, a hero with a ghost line of Arabic and three phones, a marquee, a live demo, a deep
-   card, the features list, a Play Store gallery, FAQ and a giant footer wordmark. It wears
+/* 99 Names website, in the same minimal Sazen layout as urduquran.teamsazen.com: a floating
+   glass pill, a hero with three phones in a real frame, a marquee, the live Name of the day,
+   a deep card, the features list, the 99 Names and a slim footer. It wears
    the app's own look (native/…/ui/Theme.kt): warm stone and white by day, deep ink at
    night, the app's ink hero for the deep cards and one bronze-gold accent. Google Sans like
    the app, Harmattan for Arabic and Jameel Noori Nastaleeq for Urdu. */
@@ -79,15 +79,6 @@ a:hover { color: var(--accent-edge); }
 .gp small { font: 600 11px/1 Roboto, "Helvetica Neue", Arial, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
 .gp b { font: 500 23px/1 "Google Sans", "Product Sans", Roboto, "Helvetica Neue", Arial, sans-serif; letter-spacing: -.01em; }
 /* GitHub button: same shape as the Play badge, outlined in the page's ink */
-.gh {
-  display: inline-flex; align-items: center; gap: 12px; height: 60px; padding: 0 32px 0 24px;
-  background: transparent; color: var(--ink); border: 1.5px solid var(--ink); border-radius: 999px; text-decoration: none;
-}
-.gh:hover { color: var(--ink); background: var(--sunken); }
-.gh svg { width: 26px; height: 26px; flex: none; }
-.gh span { display: grid; gap: 3px; line-height: 1; text-align: left; }
-.gh small { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-.gh b { font-size: 23px; font-weight: 500; letter-spacing: -.01em; }
 .oss { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
 .oss p { flex: 1 1 260px; margin: 0; color: var(--muted); }
 .oss p b { color: var(--ink); }
@@ -126,24 +117,15 @@ h3 { margin: 0; font-size: 19px; letter-spacing: -.015em; line-height: 1.3; font
 section { padding-block: clamp(56px, 8vw, 112px); }
 .head { max-width: 860px; margin-bottom: clamp(32px, 4vw, 52px); }
 
-/* ---------- Phone frame: a thin bezel around a real app capture ---------- */
-.phone {
-  container-type: inline-size; position: relative; width: 100%;
-  background: #3E4248; border-radius: 7.4% / 3.55%;
-  box-shadow: inset 0 0 0 1px #70757D, 0 30px 60px -24px var(--shadow);
-}
-.bezel { margin: 1.1cqw; padding: 1.7cqw; background: #050607; border-radius: 6.3cqw; }
-.screen { position: relative; overflow: hidden; border-radius: 5.2cqw; background: var(--bg); }
-.screen img { width: 100%; }
-.cam { position: absolute; z-index: 2; left: 50%; top: 1.4cqw; width: 3cqw; height: 3cqw; margin-left: -1.5cqw; border-radius: 50%; background: #050607; }
+/* ---------- Phones: real app captures in a real phone frame (scripts/phones.sh) ---------- */
+.phone { position: relative; width: 100%; }
+.phone img { width: 100%; filter: drop-shadow(0 24px 30px var(--shadow)); }
 
 /* ---------- Glow: a soft gold light behind a name's Arabic (no pattern) ---------- */
 .glow { background: radial-gradient(closest-side, rgba(217, 188, 137, .2), rgba(217, 188, 137, 0)); }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; padding-block: calc(110px + env(safe-area-inset-top)) clamp(32px, 4vw, 56px); overflow: hidden; }
-.hero-ghost { position: absolute; inset: 60px 0 auto; display: grid; place-items: center; pointer-events: none; overflow: hidden; }
-.hero-ghost span { font-family: var(--arabic); font-size: clamp(90px, 14vw, 250px); line-height: 1.8; color: var(--sunken); white-space: nowrap; }
 .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(28px, 4vw, 72px); align-items: center; }
 .hero-logo { width: clamp(76px, 8vw, 104px); height: auto; border-radius: 24%; margin: 0 0 18px; box-shadow: 0 18px 40px -20px var(--shadow); }
 .tag { display: inline-block; margin: 0 0 22px; padding: 7px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 14px; font-weight: 700; }
@@ -238,19 +220,6 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .adv-list p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
 
 /* ---------- Under the hood: native and light ---------- */
-.tech-card { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(28px, 5vw, 80px); align-items: center; padding: clamp(28px, 4.5vw, 64px); border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--card-line); }
-.tech-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 28px 0 0; }
-.tech-stats div { padding: 16px 18px; border-radius: 20px; background: var(--sunken); }
-.tech-stats dt { font-size: clamp(26px, 2.6vw, 36px); font-weight: 700; letter-spacing: -.04em; color: var(--accent); font-variant-numeric: tabular-nums; }
-.tech-stats dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
-.tech-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.tech-list li { display: grid; gap: 2px; padding: 20px; border-radius: 22px; background: var(--bg); border: 1px solid var(--line); transition: transform .45s var(--ease); }
-.tech-list li:hover { transform: translateY(-3px); }
-.tech-logo { display: block; width: 34px; height: 34px; margin-bottom: 12px; object-fit: contain; }
-.tech-list b { font-size: 17px; letter-spacing: -.02em; }
-.tech-list small { font-size: 14px; color: var(--muted); }
-@media (max-width: 1000px) { .tech-card { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .tech-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; } .tech-stats div { padding: 12px; } .tech-list li { padding: 16px; } }
 
 /* ---------- All 99 Names ---------- */
 .names-head { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between; margin-bottom: clamp(28px, 3vw, 40px); }
@@ -285,32 +254,8 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .note { font-size: 14px; color: var(--muted); margin: 20px 0 0; font-weight: 600; }
 
 /* ---------- Gallery: the Play Store screenshots ---------- */
-.gallery { overflow: hidden; }
-.gallery-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-.gal-nav { display: flex; gap: 10px; margin-bottom: clamp(32px, 4vw, 52px); }
-.round-lg { width: 52px; height: 52px; border-radius: 50%; border: 0; background: var(--surface); color: var(--ink); display: grid; place-items: center; cursor: pointer; box-shadow: inset 0 0 0 1px var(--line); transition: transform .45s var(--ease), background-color .2s ease; }
-.round-lg:hover { background: var(--accent-soft); }
-.round-lg:active { transform: scale(.94); }
-.round-lg svg, .round svg { fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.round-lg svg { width: 22px; height: 22px; }
-.gal-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-inline: max(var(--gutter), calc((100vw - 1440px) / 2)); scroll-padding-inline: max(var(--gutter), calc((100vw - 1440px) / 2)); }
-.gal-track::-webkit-scrollbar { display: none; }
-.gal-track img { flex: none; width: clamp(220px, 19vw, 300px); height: auto; aspect-ratio: 9 / 16; border-radius: 24px; scroll-snap-align: start; background: var(--surface); transition: transform .6s var(--ease); }
-.gal-track img:hover { transform: translateY(-8px); }
 
 /* ---------- FAQ ---------- */
-.faq-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
-.faq-grid .head { margin: 0; }
-.faq { background: var(--surface); border-radius: 28px; padding: 6px 28px; border: 1px solid var(--card-line); }
-.faq details + details { border-top: 1px solid var(--line); }
-.faq summary { list-style: none; cursor: pointer; padding: 22px 40px 22px 0; position: relative; font-weight: 700; font-size: 18px; letter-spacing: -.015em; }
-.faq summary::-webkit-details-marker { display: none; }
-.faq summary::after {
-  content: ""; position: absolute; right: 6px; top: 50%; width: 11px; height: 11px; margin-top: -8px;
-  border-right: 2.5px solid var(--muted); border-bottom: 2.5px solid var(--muted); transform: rotate(45deg); transition: transform .3s var(--ease);
-}
-.faq details[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
-.faq details p { margin: -6px 0 22px; color: var(--muted); max-width: 60ch; }
 
 /* ---------- Final ---------- */
 .final { text-align: center; padding-top: clamp(40px, 6vw, 80px); }
@@ -321,22 +266,12 @@ section { padding-block: clamp(56px, 8vw, 112px); }
 .final-ur { margin: 0 0 22px; font-size: clamp(22px, 2.2vw, 28px); color: var(--accent); line-height: 2.2; }
 
 /* ---------- Footer ---------- */
-.foot { background: var(--deep); color: rgba(247, 243, 234, .72); padding-block: clamp(48px, 6vw, 72px) calc(32px + env(safe-area-inset-bottom)); margin-top: clamp(40px, 6vw, 80px); }
-.foot .wrap { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px 24px; }
+.foot { background: var(--deep); color: rgba(247, 243, 234, .72); padding-block: 28px calc(28px + env(safe-area-inset-bottom)); margin-top: clamp(40px, 6vw, 80px); }
 .foot .brand { color: #fff; }
-.foot-brand p { margin: 10px 0 0; font-size: 15px; max-width: 34em; }
-.foot-brand .ur { margin: 4px 0 0; color: var(--deep-gold); font-size: 22px; }
-.foot-brand a, .foot .copy a { color: #fff; font-weight: 700; }
-.foot nav { display: grid; gap: 8px; align-content: start; }
-.foot h4 { margin: 0 0 6px; color: #fff; font-size: 14px; }
+.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px; }
+.foot nav { display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .foot nav a { color: rgba(247, 243, 234, .72); font-size: 15px; font-weight: 600; text-decoration: none; }
 .foot nav a:hover { color: #fff; }
-.foot .wordmark { grid-column: 1 / -1; display: flex; justify-content: space-between; margin: clamp(24px, 4vw, 48px) 0 0; color: #fff; font-weight: 700; letter-spacing: 0; line-height: .9; font-size: 14vw; overflow: hidden; white-space: nowrap; user-select: none; }
-.foot .wordmark span { display: block; transform: translateY(102%); transition: transform 1.3s var(--ease); }
-.foot .wordmark.in span { transform: none; }
-.foot .wordmark span:nth-child(n) { transition-delay: calc(var(--n, 0) * 45ms); }
-html:not(.js) .foot .wordmark span { transform: none; }
-.foot .copy { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin: 16px 0 0; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .14); font-size: 14px; }
 
 /* ---------- One page per Name (/names/<name>) ---------- */
 .name-page { padding-top: calc(96px + env(safe-area-inset-top)); }
@@ -407,8 +342,8 @@ html:not(.js) .foot .wordmark span { transform: none; }
 @keyframes curtain { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0); } }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
-.gp, .gh { transition: transform .45s var(--ease), border-color .2s ease, background-color .2s ease; }
-.gp:hover, .gh:hover { transform: translateY(-2px); }
+.gp { transition: transform .45s var(--ease), border-color .2s ease, background-color .2s ease; }
+.gp:hover { transform: translateY(-2px); }
 .gp:active, .chips li:active { transform: scale(.97); }
 .reveal { opacity: 0; transform: translateY(34px); transition: opacity 1s var(--ease), transform 1.1s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
@@ -423,8 +358,6 @@ html.lenis, html.lenis body { height: auto; }
 @keyframes fan-r { from { transform: translateX(-50%) rotate(0); opacity: 0; } }
 @keyframes up { from { opacity: 0; translate: 0 26px; } to { opacity: 1; translate: 0 0; } }
 @keyframes rise { from { opacity: 0; translate: 0 90px; } to { opacity: 1; translate: 0 0; } }
-.hero-ghost span { animation: ghost 1.6s .1s var(--ease) both; }
-@keyframes ghost { from { opacity: 0; transform: scale(.96); } }
 .name-card .name-ar { animation: up 1.1s .2s var(--ease) both; }
 /* Headlines reveal line by line (site.js wraps each line). */
 .lines > .ln { display: block; overflow: hidden; padding: 0 .12em .2em 0; margin: 0 -.12em -.2em 0; }
@@ -432,13 +365,12 @@ html.lenis, html.lenis body { height: auto; }
 .lines.in > .ln > span { transform: none; }
 .lines.in > .ln:nth-child(2) > span { transition-delay: .08s; } .lines.in > .ln:nth-child(3) > span { transition-delay: .16s; }
 .pair, .hero-phones { will-change: transform; }
-.faq details[open] p { animation: up .6s var(--ease) both; }
 .adv-list .ico { transition: transform .5s var(--ease), background-color .3s ease; }
 .adv-list article:hover .ico { transform: rotate(-8deg) scale(1.1); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1000px) {
-  .hero-grid, .row-grid, .deep-card, .faq-grid { grid-template-columns: 1fr; }
+  .hero-grid, .row-grid, .deep-card { grid-template-columns: 1fr; }
   .hero-phones { height: min(132vw, 640px); }
   .ph-main { width: min(52vw, 300px); }
   .ph-left, .ph-right { width: min(40vw, 240px); }
@@ -452,23 +384,18 @@ html.lenis, html.lenis body { height: auto; }
   .adv-list article:not(:nth-child(3n + 1)) { padding-left: 0; border-left: 0; }
   .adv-list article:nth-child(2n) { padding-left: 18px; border-left: 1px solid var(--line); }
   .deep-art { max-width: 320px; justify-self: center; width: 100%; }
-  .foot .wrap { grid-template-columns: 1fr 1fr; }
-  .foot-brand { grid-column: 1 / -1; }
 }
 @media (max-width: 600px) {
   body { font-size: 16px; }
-  .hero-ghost span { font-size: 30vw; }
   .adv-list { grid-template-columns: 1fr; }
   .adv-list article:nth-child(2n) { padding-left: 0; border-left: 0; }
-  .cta-row .gp, .cta-row .gh { width: 100%; justify-content: center; }
-  .gal-nav { display: none; }
-  .faq { padding: 4px 20px; }
+  .cta-row .gp { width: 100%; justify-content: center; }
   .today { padding: 18px 18px 20px; border-radius: 26px; }
   .today-ar { font-size: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .lines > .ln > span, .foot .wordmark span { transform: none; }
+  .lines > .ln > span { transform: none; }
   .reveal { opacity: 1; transform: none; }
 }

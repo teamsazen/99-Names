@@ -4,7 +4,8 @@
 // /names/<name>, and a sitemap listing every page.
 // Run: node build.mjs
 import { createHash } from 'node:crypto';
-import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -57,23 +58,15 @@ const grid = names
   )
   .join('\n');
 
-// An app capture in a phone frame; screens with a dark capture (public/img/dark/) follow
-// the visitor's light or dark setting. Both come from the native app's StoreShots renders.
-const darkShots = new Set(['home', 'rahman', 'grid', 'settings', 'search', 'favourites']);
+// An app capture in a real phone frame (website/scripts/phones.sh). A screen with a dark
+// capture in public/img/dark/ follows the visitor's light or dark setting.
 const phone = (_, name, cls, alt, eager) => {
-  const img = `<img src="/img/${name}.webp" alt="${alt}" width="780" height="1688"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
-  const pic = darkShots.has(name)
+  const img = `<img src="/img/${name}.webp" alt="${alt}" width="780" height="1570"${eager ? ' fetchpriority="high"' : ' loading="lazy"'} decoding="async">`;
+  const pic = existsSync(path.join(here, 'public/img/dark', `${name}.webp`))
     ? `<picture><source media="(prefers-color-scheme: dark)" srcset="/img/dark/${name}.webp">${img}</picture>`
     : img;
-  return `<div class="phone ${cls}"><div class="bezel"><div class="screen">${pic}<i class="cam"></i></div></div></div>`;
+  return `<div class="phone ${cls}">${pic}</div>`;
 };
-
-// The Play Store artwork (public/img/store/, from store/listing).
-const store = (await readdir(path.join(here, 'public/img/store'))).filter((f) => /^\d+\.webp$/.test(f)).sort();
-const gallery = store.map((f, i) => {
-  const n = f.replace('.webp', '');
-  return `<img src="/img/store/${n}-sm.webp" srcset="/img/store/${n}-sm.webp 1x, /img/store/${n}.webp 2x" width="315" height="560" loading="lazy" decoding="async" alt="Play Store screenshot ${i + 1} of ${store.length}">`;
-}).join('\n');
 
 // Every Name for the live "Name of the day" card; "<" escaped so it can sit in a script tag.
 const namesJson = JSON.stringify(names.map((n) => ({ n: n.number, ar: n.arabic, tr: n.transliteration, en: n.english, ur: n.urdu, rf: n.reflection, path: n.path })))
@@ -99,7 +92,6 @@ const terms = await readFile(path.join(here, '..', 'docs/terms/index.html'), 'ut
 await writeFile(path.join(dist, 'terms/index.html'), bust(terms));
 const home = bust(template
   .replace('{{NAMES}}', grid)
-  .replace('{{GALLERY}}', gallery)
   .replace('{{NAMES_JSON}}', () => namesJson)
   .replace(/\{\{PHONE (\w+) ([\w-]+) "([^"]*)"( eager)?\}\}/g, phone));
 if (home.includes('{{')) throw new Error(`Unfilled placeholder in index.html: ${home.match(/\{\{[^}]*\}\}/)[0]}`);
